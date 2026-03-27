@@ -1,0 +1,10 @@
+{
+  "name": "doc2site",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "node scripts/generate.js"
+  },
+  "dependencies": {
+    "marked": "^9.0.0"
+  }
+}
