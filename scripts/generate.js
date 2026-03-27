@@ -5,6 +5,11 @@ const { marked } = require("marked");
 const docsDir = path.join(__dirname, "../docs");
 const siteDir = path.join(__dirname, "../site");
 
+if (!fs.existsSync(docsDir)) {
+  console.error("❌ docs folder not found");
+  process.exit(1);
+}
+
 if (!fs.existsSync(siteDir)) {
   fs.mkdirSync(siteDir);
 }
@@ -19,17 +24,12 @@ files.forEach(file => {
     const html = marked(content);
 
     const name = file.replace(".md", "");
-    const outputPath = path.join(siteDir, `${name}.html`);
-
-    fs.writeFileSync(outputPath, html);
+    fs.writeFileSync(path.join(siteDir, `${name}.html`), html);
 
     routes[name] = `/site/${name}.html`;
   }
 });
 
-fs.writeFileSync(
-  path.join(__dirname, "../index.json"),
-  JSON.stringify(routes, null, 2)
-);
+fs.writeFileSync("index.json", JSON.stringify(routes, null, 2));
 
-console.log("Done!");
+console.log("✅ Build successful");
