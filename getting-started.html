@@ -1,17 +1,163 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>getting-started</title>
   <style>
-    body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; }
-    nav { margin-bottom: 20px; }
-    nav a { margin-right: 10px; text-decoration: none; color: #0066cc; }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #f9fafb;
+    color: #1a1a2e;
+    line-height: 1.7;
+    padding: 0;
+    margin: 0;
+  }
+
+  nav {
+    background: #1a1a2e;
+    padding: 14px 40px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  nav a {
+    color: #a0c4ff;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  nav a:hover { color: #ffffff; }
+
+  .container {
+    max-width: 860px;
+    margin: 48px auto;
+    padding: 0 24px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+    padding: 48px;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 16px;
+    border-bottom: 3px solid #a0c4ff;
+    padding-bottom: 10px;
+  }
+
+  h2 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #2d2d5e;
+    margin: 32px 0 12px;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #3a3a6e;
+    margin: 24px 0 8px;
+  }
+
+  p {
+    font-size: 1rem;
+    margin-bottom: 16px;
+    color: #333;
+  }
+
+  a { color: #0066cc; }
+
+  code {
+    background: #f0f4ff;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-family: 'Courier New', monospace;
+    color: #d63384;
+  }
+
+  pre {
+    background: #1e1e2e;
+    color: #cdd6f4;
+    padding: 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+  }
+
+  pre code {
+    background: none;
+    color: inherit;
+    padding: 0;
+  }
+
+  ul, ol {
+    padding-left: 24px;
+    margin-bottom: 16px;
+  }
+
+  li { margin-bottom: 6px; }
+
+  blockquote {
+    border-left: 4px solid #a0c4ff;
+    padding: 10px 20px;
+    background: #f0f4ff;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 16px;
+    color: #555;
+    font-style: italic;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+
+  th {
+    background: #1a1a2e;
+    color: #fff;
+    padding: 10px 14px;
+    text-align: left;
+  }
+
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  tr:nth-child(even) { background: #f5f7ff; }
+
+  img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin: 16px 0;
+  }
+
+  hr {
+    border: none;
+    border-top: 2px solid #e0e0e0;
+    margin: 32px 0;
+  }
+
+
   </style>
 </head>
 <body>
   <nav><a href="/doc2site/getting-started.html">getting-started</a> | <a href="/doc2site/hello.html">hello</a> | <a href="/doc2site/index.html">index</a></nav>
-  <h1>Getting Started</h1>
+  <div class="container">
+    <h1>Getting Started</h1>
 
+  </div>
 </body>
 </html>
