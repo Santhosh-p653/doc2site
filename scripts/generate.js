@@ -11,7 +11,7 @@ const files = fs.readdirSync(docsDir).filter(f => f.endsWith('.md'));
 
 const routes = files.map(file => ({
   title: file.replace('.md', ''),
-  url: '/' + file.replace('.md', '.html')
+  url: './' + file.replace('.md', '.html')
 }));
 
 fs.writeFileSync(path.join(outDir, 'routes.json'), JSON.stringify(routes, null, 2));
