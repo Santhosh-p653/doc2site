@@ -1,0 +1,19 @@
+name: Auto Commit
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+jobs:
+  commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Make changes
+        run: echo "Your changes here"
+      - name: Commit and push
+        run: |
+          git config user.email "santhosh11042007@gmail.com"
+          git config user.name "Santhosh-p653"
+          git add .
+          git commit -m "Auto commit" || echo "Nothing to commit"
+          git push
