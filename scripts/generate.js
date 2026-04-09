@@ -1,0 +1,154 @@
+
+const fs = require('fs');
+const path = require('path');
+const { marked } = require('marked');
+const crypto = require('crypto');
+
+const docsDir = './docs';
+const outDir = './output';
+const stylesDir = './styles';
+const hashFile = './output/hashes.json';
+
+if (!fs.existsSync(outDir)) fs.mkdirSync(outDir);
+if (!fs.existsSync(stylesDir)) fs.mkdirSync(stylesDir);
+
+const files = fs.readdirSync(docsDir).filter(f => f.endsWith('.md'));
+
+let oldHashes = {};
+if (fs.existsSync(hashFile)) {
+  oldHashes = JSON.parse(fs.readFileSync(hashFile, 'utf-8'));
+}
+const newHashes = {};
+
+const routes = files.map(file => ({
+  title: file.replace('.md', ''),
+  url: '/doc2site/' + file.replace('.md', '.html')
+}));
+
+fs.writeFileSync(path.join(outDir, 'routes.json'), JSON.stringify(routes, null, 2));
+
+const navLinks = routes
+  .filter(r => r.title !== 'index')
+  .map(r => '<a href="' + r.url + '">' + r.title + '</a>')
+  .join('');
+
+const baseStyles = [
+  '*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }',
+  ':root {',
+  '  --bg: #f9fafb; --text: #1a1a2e; --nav-bg: #1a1a2e; --nav-link: #a0c4ff;',
+  '  --container-bg: #ffffff; --shadow: rgba(0,0,0,0.08); --code-bg: #f0f4ff;',
+  '  --pre-bg: #1e1e2e; --pre-text: #cdd6f4; --blockquote-bg: #f0f4ff;',
+  '  --border: #e0e0e0; --h1-border: #a0c4ff; --search-bg: #ffffff;',
+  '  --search-border: #ccc;',
+  '}',
+  'body.dark {',
+  '  --bg: #0f0f1a; --text: #e0e0f0; --nav-bg: #0a0a14; --nav-link: #7eb8ff;',
+  '  --container-bg: #1a1a2e; --shadow: rgba(0,0,0,0.4); --code-bg: #2a2a3e;',
+  '  --pre-bg: #0d0d1a; --pre-text: #cdd6f4; --blockquote-bg: #1e1e32;',
+  '  --border: #2a2a3e; --h1-border: #7eb8ff; --search-bg: #1a1a2e;',
+  '  --search-border: #3a3a5e;',
+  '}',
+  'body { font-family: "Segoe UI", system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; transition: background 0.3s, color 0.3s; }',
+  'nav { background: var(--nav-bg); padding: 14px 40px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px var(--shadow); }',
+  '.nav-brand { color: #ffffff; font-weight: 700; font-size: 1.1rem; text-decoration: none; margin-right: 10px; }',
+  'nav a { color: var(--nav-link); text-decoration: none; font-size: 0.9rem; font-weight: 500; padding: 4px 10px; border-radius: 20px; transition: background 0.2s, color 0.2s; }',
+  'nav a:hover { background: rgba(160,196,255,0.15); color: #ffffff; }',
+  '.nav-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }',
+  '.search-box { padding: 6px 14px; border-radius: 20px; border: 1px solid var(--search-border); background: var(--search-bg); color: var(--text); font-size: 0.85rem; width: 200px; outline: none; }',
+  '.search-results { position: absolute; top: 54px; right: 40px; background: var(--container-bg); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px var(--shadow); width: 260px; z-index: 200; display: none; overflow: hidden; }',
+  '.search-results a { display: block; padding: 10px 16px; color: var(--text); text-decoration: none; font-size: 0.9rem; border-bottom: 1px solid var(--border); }',
+  '.search-results a:hover { background: var(--code-bg); }',
+  '.theme-toggle { background: none; border: 1px solid var(--nav-link); color: var(--nav-link); border-radius: 20px; padding: 4px 12px; cursor: pointer; font-size: 0.85rem; }',
+  '.theme-toggle:hover { background: var(--nav-link); color: #1a1a2e; }',
+  '.container { max-width: 860px; margin: 48px auto; padding: 48px; background: var(--container-bg); border-radius: 16px; box-shadow: 0 4px 24px var(--shadow); }',
+  'h1 { font-size: 2.4rem; font-weight: 800; margin-bottom: 16px; border-bottom: 3px solid var(--h1-border); padding-bottom: 12px; }',
+  'h2 { font-size: 1.6rem; font-weight: 700; margin: 36px 0 12px; }',
+  'h3 { font-size: 1.2rem; font-weight: 600; margin: 24px 0 8px; }',
+  'p { font-size: 1rem; margin-bottom: 16px; }',
+  'a { color: #0066cc; }',
+  'code { background: var(--code-bg); padding: 2px 7px; border-radius: 4px; font-size: 0.88rem; font-family: "Courier New", monospace; color: #d63384; }',
+  'pre { background: var(--pre-bg); color: var(--pre-text); padding: 20px; border-radius: 10px; overflow-x: auto; margin-bottom: 20px; }',
+  'pre code { background: none; color: inherit; padding: 0; }',
+  'ul, ol { padding-left: 24px; margin-bottom: 16px; }',
+  'li { margin-bottom: 6px; }',
+  'blockquote { border-left: 4px solid var(--h1-border); padding: 12px 20px; background: var(--blockquote-bg); border-radius: 0 10px 10px 0; margin-bottom: 16px; font-style: italic; }',
+  'table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }',
+  'th { background: var(--nav-bg); color: #fff; padding: 10px 14px; text-align: left; }',
+  'td { padding: 10px 14px; border-bottom: 1px solid var(--border); }',
+  'tr:nth-child(even) { background: var(--code-bg); }',
+  'img { max-width: 100%; border-radius: 10px; margin: 16px 0; }',
+  'hr { border: none; border-top: 2px solid var(--border); margin: 32px 0; }',
+  '@media (max-width: 600px) { .container { padding: 24px 16px; margin: 16px; } nav { padding: 12px 16px; } .search-box { width: 130px; } h1 { font-size: 1.8rem; } }'
+].join('\n');
+
+const scriptTag = '<script>' +
+  'var toggle = document.getElementById("themeToggle");' +
+  'var saved = localStorage.getItem("theme");' +
+  'if (saved === "dark") { document.body.classList.add("dark"); toggle.textContent = "☀️ Light"; }' +
+  'toggle.addEventListener("click", function() {' +
+  '  document.body.classList.toggle("dark");' +
+  '  var isDark = document.body.classList.contains("dark");' +
+  '  localStorage.setItem("theme", isDark ? "dark" : "light");' +
+  '  toggle.textContent = isDark ? "☀️ Light" : "🌙 Dark";' +
+  '});' +
+  'var searchBox = document.getElementById("searchBox");' +
+  'var searchResults = document.getElementById("searchResults");' +
+  'fetch("/doc2site/routes.json").then(function(r) { return r.json(); }).then(function(routes) {' +
+  '  searchBox.addEventListener("input", function() {' +
+  '    var q = searchBox.value.toLowerCase().trim();' +
+  '    if (!q) { searchResults.style.display = "none"; return; }' +
+  '    var matches = routes.filter(function(r) { return r.title.toLowerCase().includes(q); });' +
+  '    if (matches.length === 0) { searchResults.style.display = "none"; return; }' +
+  '    searchResults.innerHTML = matches.map(function(r) { return "<a href=" + r.url + ">" + r.title + "</a>"; }).join("");' +
+  '    searchResults.style.display = "block";' +
+  '  });' +
+  '  document.addEventListener("click", function(e) { if (!searchBox.contains(e.target)) searchResults.style.display = "none"; });' +
+  '});' +
+  '</script>';
+
+files.forEach(function(file) {
+  var name = file.replace('.md', '');
+  var content = fs.readFileSync(path.join(docsDir, file), 'utf-8');
+
+  var hash = crypto.createHash('md5').update(content).digest('hex');
+  newHashes[name] = hash;
+  if (oldHashes[name] === hash && fs.existsSync(path.join(outDir, file.replace('.md', '.html')))) {
+    console.log('Skipped (unchanged):', file);
+    return;
+  }
+
+  var customStyles = '';
+  var customCssPath = path.join(stylesDir, name + '.css');
+  if (fs.existsSync(customCssPath)) {
+    customStyles = fs.readFileSync(customCssPath, 'utf-8');
+  }
+
+  var html = '<!DOCTYPE html>\n' +
+    '<html lang="en">\n' +
+    '<head>\n' +
+    '<meta charset="UTF-8">\n' +
+    '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+    '<title>' + name + ' — doc2site</title>\n' +
+    '<style>\n' + baseStyles + '\n' + customStyles + '\n</style>\n' +
+    '</head>\n' +
+    '<body>\n' +
+    '<nav>\n' +
+    '<a class="nav-brand" href="/doc2site/">doc2site</a>\n' +
+    navLinks + '\n' +
+    '<div class="nav-right">\n' +
+    '<input class="search-box" id="searchBox" type="text" placeholder="Search pages..." />\n' +
+    '<div class="search-results" id="searchResults"></div>\n' +
+    '<button class="theme-toggle" id="themeToggle">🌙 Dark</button>\n' +
+    '</div>\n' +
+    '</nav>\n' +
+    '<div class="container">\n' +
+    marked(content) + '\n' +
+    '</div>\n' +
+    scriptTag + '\n' +
+    '</body>\n</html>';
+
+  fs.writeFileSync(path.join(outDir, file.replace('.md', '.html')), html);
+  console.log('Generated:', file);
+});
+
+fs.writeFileSync(hashFile, JSON.stringify(newHashes, null, 2));
