@@ -1,14 +1,14 @@
 [
   {
     "title": "getting-started",
-    "url": "./getting-started.html"
+    "url": "/doc2site/getting-started.html"
   },
   {
     "title": "hello",
-    "url": "./hello.html"
+    "url": "/doc2site/hello.html"
   },
   {
     "title": "index",
-    "url": "./index.html"
+    "url": "/doc2site/index.html"
   }
 ]
