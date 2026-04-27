@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>README — doc2site</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f9fafb; --text: #1a1a2e; --nav-bg: #1a1a2e; --nav-link: #a0c4ff;
+  --container-bg: #ffffff; --shadow: rgba(0,0,0,0.08); --code-bg: #f0f4ff;
+  --pre-bg: #1e1e2e; --pre-text: #cdd6f4; --blockquote-bg: #f0f4ff;
+  --border: #e0e0e0; --h1-border: #a0c4ff; --search-bg: #ffffff;
+  --search-border: #ccc;
+}
+body.dark {
+  --bg: #0f0f1a; --text: #e0e0f0; --nav-bg: #0a0a14; --nav-link: #7eb8ff;
+  --container-bg: #1a1a2e; --shadow: rgba(0,0,0,0.4); --code-bg: #2a2a3e;
+  --pre-bg: #0d0d1a; --pre-text: #cdd6f4; --blockquote-bg: #1e1e32;
+  --border: #2a2a3e; --h1-border: #7eb8ff; --search-bg: #1a1a2e;
+  --search-border: #3a3a5e;
+}
+body { font-family: "Segoe UI", system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; transition: background 0.3s, color 0.3s; }
+nav { background: var(--nav-bg); padding: 14px 40px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px var(--shadow); }
+.nav-brand { color: #ffffff; font-weight: 700; font-size: 1.1rem; text-decoration: none; margin-right: 10px; }
+nav a { color: var(--nav-link); text-decoration: none; font-size: 0.9rem; font-weight: 500; padding: 4px 10px; border-radius: 20px; transition: background 0.2s, color 0.2s; }
+nav a:hover { background: rgba(160,196,255,0.15); color: #ffffff; }
+.nav-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.search-box { padding: 6px 14px; border-radius: 20px; border: 1px solid var(--search-border); background: var(--search-bg); color: var(--text); font-size: 0.85rem; width: 200px; outline: none; }
+.search-results { position: absolute; top: 54px; right: 40px; background: var(--container-bg); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px var(--shadow); width: 260px; z-index: 200; display: none; overflow: hidden; }
+.search-results a { display: block; padding: 10px 16px; color: var(--text); text-decoration: none; font-size: 0.9rem; border-bottom: 1px solid var(--border); }
+.search-results a:hover { background: var(--code-bg); }
+.theme-toggle { background: none; border: 1px solid var(--nav-link); color: var(--nav-link); border-radius: 20px; padding: 4px 12px; cursor: pointer; font-size: 0.85rem; }
+.theme-toggle:hover { background: var(--nav-link); color: #1a1a2e; }
+.container { max-width: 860px; margin: 48px auto; padding: 48px; background: var(--container-bg); border-radius: 16px; box-shadow: 0 4px 24px var(--shadow); }
+h1 { font-size: 2.4rem; font-weight: 800; margin-bottom: 16px; border-bottom: 3px solid var(--h1-border); padding-bottom: 12px; }
+h2 { font-size: 1.6rem; font-weight: 700; margin: 36px 0 12px; }
+h3 { font-size: 1.2rem; font-weight: 600; margin: 24px 0 8px; }
+p { font-size: 1rem; margin-bottom: 16px; }
+a { color: #0066cc; }
+code { background: var(--code-bg); padding: 2px 7px; border-radius: 4px; font-size: 0.88rem; font-family: "Courier New", monospace; color: #d63384; }
+pre { background: var(--pre-bg); color: var(--pre-text); padding: 20px; border-radius: 10px; overflow-x: auto; margin-bottom: 20px; }
+pre code { background: none; color: inherit; padding: 0; }
+ul, ol { padding-left: 24px; margin-bottom: 16px; }
+li { margin-bottom: 6px; }
+blockquote { border-left: 4px solid var(--h1-border); padding: 12px 20px; background: var(--blockquote-bg); border-radius: 0 10px 10px 0; margin-bottom: 16px; font-style: italic; }
+table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+th { background: var(--nav-bg); color: #fff; padding: 10px 14px; text-align: left; }
+td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+tr:nth-child(even) { background: var(--code-bg); }
+img { max-width: 100%; border-radius: 10px; margin: 16px 0; }
+hr { border: none; border-top: 2px solid var(--border); margin: 32px 0; }
+@media (max-width: 600px) { .container { padding: 24px 16px; margin: 16px; } nav { padding: 12px 16px; } .search-box { width: 130px; } h1 { font-size: 1.8rem; } }
+
+</style>
+</head>
+<body>
+<nav>
+<a class="nav-brand" href="/doc2site/">doc2site</a>
+<a href="/doc2site/README.html">README</a><a href="/doc2site/getting-started.html">getting-started</a><a href="/doc2site/hello.html">hello</a><a href="/doc2site/nature.html">nature</a>
+<div class="nav-right">
+<input class="search-box" id="searchBox" type="text" placeholder="Search pages..." />
+<div class="search-results" id="searchResults"></div>
+<button class="theme-toggle" id="themeToggle">🌙 Dark</button>
+</div>
+</nav>
+<div class="container">
+<div align="center">
+
+<pre><code>███████╗ █████╗ ███╗   ██╗████████╗██╗  ██╗ ██████╗ ███████╗██╗  ██╗
+██╔════╝██╔══██╗████╗  ██║╚══██╔══╝██║  ██║██╔═══██╗██╔════╝██║  ██║
+███████╗███████║██╔██╗ ██║   ██║   ███████║██║   ██║███████╗███████║
+╚════██║██╔══██║██║╚██╗██║   ██║   ██╔══██║██║   ██║╚════██║██╔══██║
+███████║██║  ██║██║ ╚████║   ██║   ██║  ██║╚██████╔╝███████║██║  ██║
+╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝
+</code></pre>
+<h3><code>Building AI systems that actually do things.</code></h3>
+<p><a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=18&pause=1000&color=00D9FF&center=true&vCenter=true&width=600&lines=AI+%2F+ML+Engineer;Agentic+AI+%7C+Microservices+%7C+MLOps;FastAPI+%7C+LangGraph+%7C+Docker;Building+in+public+%F0%9F%9A%80" alt="Typing SVG"></a></p>
+</div>
+
+<hr>
+<img align="right" width="380" src="https://github-readme-stats.vercel.app/api?username=Santhosh-p653&show_icons=true&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=00d9ff&icon_color=00d9ff&text_color=c9d1d9&rank_icon=github" />
+
+<h2>👾 About Me</h2>
+<pre><code class="language-python">class Santhosh:
+    role       = &quot;AI / ML Engineer&quot;
+    focus      = [&quot;Agentic AI&quot;, &quot;MLOps&quot;, &quot;Microservices&quot;]
+    currently  = &quot;Building deepfake-agentic-ai 🕵️&quot;
+    stack      = [&quot;FastAPI&quot;, &quot;LangGraph&quot;, &quot;Docker&quot;, &quot;PostgreSQL&quot;]
+    approach   = &quot;Ship → Learn → Iterate&quot;
+    mantra     = &quot;Make it work. Make it right. Make it fast.&quot;
+</code></pre>
+<ul>
+<li>🔭 Working on <strong><a href="https://github.com/Santhosh-p653/deepfake-agentic-ai">deepfake-agentic-ai</a></strong> — CV + DL powered deepfake detection microservices pipeline</li>
+<li>🧠 Exploring <strong>LangGraph agents</strong>, <strong>RetinaFace + Xception</strong> &amp; agentic reasoning</li>
+<li>⚙️ Passionate about <strong>CI/CD</strong>, <strong>Docker</strong>, and automating everything</li>
+<li>📬 Open to collaborating on AI-driven tools that solve real problems</li>
+</ul>
+<br clear="right"/>
+
+<hr>
+<h2>🛠️ Tech Stack</h2>
+<div align="center">
+
+<p><strong>Languages</strong></p>
+<p><img src="https://img.shields.io/badge/Python-0d1117?style=for-the-badge&logo=python&logoColor=00d9ff" alt="Python">
+<img src="https://img.shields.io/badge/JavaScript-0d1117?style=for-the-badge&logo=javascript&logoColor=F7DF1E" alt="JavaScript">
+<img src="https://img.shields.io/badge/Java-0d1117?style=for-the-badge&logo=openjdk&logoColor=ED8B00" alt="Java">
+<img src="https://img.shields.io/badge/SQL-0d1117?style=for-the-badge&logo=postgresql&logoColor=336791" alt="SQL"></p>
+<p><strong>AI / ML</strong></p>
+<p><img src="https://img.shields.io/badge/LangGraph-0d1117?style=for-the-badge&logo=langchain&logoColor=00d9ff" alt="LangGraph">
+<img src="https://img.shields.io/badge/FastAPI-0d1117?style=for-the-badge&logo=fastapi&logoColor=009688" alt="FastAPI">
+<img src="https://img.shields.io/badge/OpenCV-0d1117?style=for-the-badge&logo=opencv&logoColor=5C3EE8" alt="OpenCV">
+<img src="https://img.shields.io/badge/PyTorch-0d1117?style=for-the-badge&logo=pytorch&logoColor=EE4C2C" alt="PyTorch"></p>
+<p><strong>Infrastructure &amp; DevOps</strong></p>
+<p><img src="https://img.shields.io/badge/Docker-0d1117?style=for-the-badge&logo=docker&logoColor=2496ED" alt="Docker">
+<img src="https://img.shields.io/badge/GitHub_Actions-0d1117?style=for-the-badge&logo=githubactions&logoColor=2088FF" alt="GitHub Actions">
+<img src="https://img.shields.io/badge/PostgreSQL-0d1117?style=for-the-badge&logo=postgresql&logoColor=336791" alt="PostgreSQL">
+<img src="https://img.shields.io/badge/ChromaDB-0d1117?style=for-the-badge&logo=databricks&logoColor=FF6B35" alt="ChromaDB">
+<img src="https://img.shields.io/badge/Linux-0d1117?style=for-the-badge&logo=linux&logoColor=FCC624" alt="Linux"></p>
+</div>
+
+<hr>
+<h2>🚀 Featured Projects</h2>
+<div align="center">
+
+<p><a href="https://github.com/Santhosh-p653/deepfake-agentic-ai"><img src="https://github-readme-stats.vercel.app/api/pin/?username=Santhosh-p653&repo=deepfake-agentic-ai&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=00d9ff&icon_color=00d9ff&text_color=c9d1d9" alt="deepfake-agentic-ai"></a>
+<a href="https://github.com/Santhosh-p653/talk2care"><img src="https://github-readme-stats.vercel.app/api/pin/?username=Santhosh-p653&repo=talk2care&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=00d9ff&icon_color=00d9ff&text_color=c9d1d9" alt="talk2care"></a>
+<a href="https://github.com/Santhosh-p653/doc2site"><img src="https://github-readme-stats.vercel.app/api/pin/?username=Santhosh-p653&repo=doc2site&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=00d9ff&icon_color=00d9ff&text_color=c9d1d9" alt="doc2site"></a></p>
+</div>
+
+<table>
+<thead>
+<tr>
+<th>Project</th>
+<th>What it does</th>
+<th>Stack</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>🕵️ <strong><a href="https://github.com/Santhosh-p653/deepfake-agentic-ai">deepfake-agentic-ai</a></strong></td>
+<td>Microservices pipeline for AI-powered deepfake detection using CV + DL. Full <code>api → agents → ml → agents → api → db</code> flow with LangGraph orchestration</td>
+<td><code>Python</code> <code>FastAPI</code> <code>LangGraph</code> <code>Docker</code> <code>PostgreSQL</code> <code>ChromaDB</code></td>
+</tr>
+<tr>
+<td>💬 <strong><a href="https://github.com/Santhosh-p653/talk2care">talk2care</a></strong></td>
+<td>Voice-first healthcare chat app with real-time speech recognition and Spring Boot backend</td>
+<td><code>Java</code> <code>Spring Boot</code> <code>Web Speech API</code> <code>Thymeleaf</code></td>
+</tr>
+<tr>
+<td>📄 <strong><a href="https://github.com/Santhosh-p653/doc2site">doc2site</a></strong></td>
+<td>Markdown → static site generator with incremental builds, dark mode toggle, search, and auto-deploy via GitHub Actions</td>
+<td><code>JavaScript</code> <code>Node.js</code> <code>GitHub Actions</code> <code>GitHub Pages</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>📊 Stats &amp; Activity</h2>
+<div align="center">
+
+<img height="160" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Santhosh-p653&layout=compact&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=00d9ff&text_color=c9d1d9&langs_count=8" />
+
+<img height="160" src="https://github-readme-streak-stats.herokuapp.com?user=Santhosh-p653&theme=tokyonight&hide_border=true&background=0d1117&ring=00d9ff&fire=00d9ff&currStreakLabel=00d9ff" />
+
+</div>
+
+<div align="center">
+
+<p><a href="https://github.com/Santhosh-p653"><img src="https://github-readme-activity-graph.vercel.app/graph?username=Santhosh-p653&theme=react-dark&hide_border=true&bg_color=0d1117&color=00d9ff&line=00d9ff&point=ffffff" alt="Activity Graph"></a></p>
+</div>
+
+<hr>
+<div align="center">
+
+<h3>🌐 Let&#39;s Connect</h3>
+<p><a href="https://linkedin.com/in/YOUR_LINKEDIN"><img src="https://img.shields.io/badge/LinkedIn-0d1117?style=for-the-badge&logo=linkedin&logoColor=0A66C2" alt="LinkedIn"></a>
+<a href="https://github.com/Santhosh-p653"><img src="https://img.shields.io/badge/GitHub-0d1117?style=for-the-badge&logo=github&logoColor=ffffff" alt="GitHub"></a>
+<a href="https://YOUR_PORTFOLIO_LINK"><img src="https://img.shields.io/badge/Portfolio-0d1117?style=for-the-badge&logo=vercel&logoColor=00d9ff" alt="Portfolio"></a></p>
+<br/>
+
+<p><img src="https://komarev.com/ghpvc/?username=Santhosh-p653&style=for-the-badge&color=00d9ff&label=PROFILE+VIEWS" alt="Profile Views"></p>
+<br/>
+
+<pre><code>// Thanks for stopping by. Let&#39;s build something cool. 🚀
+</code></pre>
+</div>
+
+</div>
+<script>var toggle = document.getElementById("themeToggle");var saved = localStorage.getItem("theme");if (saved === "dark") { document.body.classList.add("dark"); toggle.textContent = "☀️ Light"; }toggle.addEventListener("click", function() {  document.body.classList.toggle("dark");  var isDark = document.body.classList.contains("dark");  localStorage.setItem("theme", isDark ? "dark" : "light");  toggle.textContent = isDark ? "☀️ Light" : "🌙 Dark";});var searchBox = document.getElementById("searchBox");var searchResults = document.getElementById("searchResults");fetch("/doc2site/routes.json").then(function(r) { return r.json(); }).then(function(routes) {  searchBox.addEventListener("input", function() {    var q = searchBox.value.toLowerCase().trim();    if (!q) { searchResults.style.display = "none"; return; }    var matches = routes.filter(function(r) { return r.title.toLowerCase().includes(q); });    if (matches.length === 0) { searchResults.style.display = "none"; return; }    searchResults.innerHTML = matches.map(function(r) { return "<a href=" + r.url + ">" + r.title + "</a>"; }).join("");    searchResults.style.display = "block";  });  document.addEventListener("click", function(e) { if (!searchBox.contains(e.target)) searchResults.style.display = "none"; });});</script>
+</body>
+</html>
