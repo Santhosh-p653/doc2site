@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Santhosh P — doc2site</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f9fafb; --text: #1a1a2e; --nav-bg: #1a1a2e; --nav-link: #a0c4ff;
+  --container-bg: #ffffff; --shadow: rgba(0,0,0,0.08); --code-bg: #f0f4ff;
+  --pre-bg: #1e1e2e; --pre-text: #cdd6f4; --blockquote-bg: #f0f4ff;
+  --border: #e0e0e0; --h1-border: #a0c4ff; --search-bg: #ffffff;
+  --search-border: #ccc;
+}
+body.dark {
+  --bg: #0f0f1a; --text: #e0e0f0; --nav-bg: #0a0a14; --nav-link: #7eb8ff;
+  --container-bg: #1a1a2e; --shadow: rgba(0,0,0,0.4); --code-bg: #2a2a3e;
+  --pre-bg: #0d0d1a; --pre-text: #cdd6f4; --blockquote-bg: #1e1e32;
+  --border: #2a2a3e; --h1-border: #7eb8ff; --search-bg: #1a1a2e;
+  --search-border: #3a3a5e;
+}
+body { font-family: "Segoe UI", system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; transition: background 0.3s, color 0.3s; }
+nav { background: var(--nav-bg); padding: 14px 40px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px var(--shadow); }
+.nav-brand { color: #ffffff; font-weight: 700; font-size: 1.1rem; text-decoration: none; margin-right: 10px; }
+nav a { color: var(--nav-link); text-decoration: none; font-size: 0.9rem; font-weight: 500; padding: 4px 10px; border-radius: 20px; transition: background 0.2s, color 0.2s; }
+nav a:hover { background: rgba(160,196,255,0.15); color: #ffffff; }
+.nav-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.search-box { padding: 6px 14px; border-radius: 20px; border: 1px solid var(--search-border); background: var(--search-bg); color: var(--text); font-size: 0.85rem; width: 200px; outline: none; }
+.search-results { position: absolute; top: 54px; right: 40px; background: var(--container-bg); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px var(--shadow); width: 260px; z-index: 200; display: none; overflow: hidden; }
+.search-results a { display: block; padding: 10px 16px; color: var(--text); text-decoration: none; font-size: 0.9rem; border-bottom: 1px solid var(--border); }
+.search-results a:hover { background: var(--code-bg); }
+.theme-toggle { background: none; border: 1px solid var(--nav-link); color: var(--nav-link); border-radius: 20px; padding: 4px 12px; cursor: pointer; font-size: 0.85rem; }
+.theme-toggle:hover { background: var(--nav-link); color: #1a1a2e; }
+.container { max-width: 860px; margin: 48px auto; padding: 48px; background: var(--container-bg); border-radius: 16px; box-shadow: 0 4px 24px var(--shadow); }
+h1 { font-size: 2.4rem; font-weight: 800; margin-bottom: 16px; border-bottom: 3px solid var(--h1-border); padding-bottom: 12px; }
+h2 { font-size: 1.6rem; font-weight: 700; margin: 36px 0 12px; }
+h3 { font-size: 1.2rem; font-weight: 600; margin: 24px 0 8px; }
+p { font-size: 1rem; margin-bottom: 16px; }
+a { color: #0066cc; }
+code { background: var(--code-bg); padding: 2px 7px; border-radius: 4px; font-size: 0.88rem; font-family: "Courier New", monospace; color: #d63384; }
+pre { background: var(--pre-bg); color: var(--pre-text); padding: 20px; border-radius: 10px; overflow-x: auto; margin-bottom: 20px; }
+pre code { background: none; color: inherit; padding: 0; }
+ul, ol { padding-left: 24px; margin-bottom: 16px; }
+li { margin-bottom: 6px; }
+blockquote { border-left: 4px solid var(--h1-border); padding: 12px 20px; background: var(--blockquote-bg); border-radius: 0 10px 10px 0; margin-bottom: 16px; font-style: italic; }
+table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+th { background: var(--nav-bg); color: #fff; padding: 10px 14px; text-align: left; }
+td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+tr:nth-child(even) { background: var(--code-bg); }
+img { max-width: 100%; border-radius: 10px; margin: 16px 0; }
+hr { border: none; border-top: 2px solid var(--border); margin: 32px 0; }
+@media (max-width: 600px) { .container { padding: 24px 16px; margin: 16px; } nav { padding: 12px 16px; } .search-box { width: 130px; } h1 { font-size: 1.8rem; } }
+
+</style>
+</head>
+<body>
+<nav>
+<a class="nav-brand" href="/doc2site/">doc2site</a>
+<a href="/doc2site/Santhosh P.html">Santhosh P</a><a href="/doc2site/Santhosh.html">Santhosh</a><a href="/doc2site/getting-started.html">getting-started</a><a href="/doc2site/hello.html">hello</a><a href="/doc2site/nature.html">nature</a>
+<div class="nav-right">
+<input class="search-box" id="searchBox" type="text" placeholder="Search pages..." />
+<div class="search-results" id="searchResults"></div>
+<button class="theme-toggle" id="themeToggle">🌙 Dark</button>
+</div>
+</nav>
+<div class="container">
+<div align="center">
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!--                      SYSTEM BOOT                           -->
+<!-- ════════════════════════════════════════════════════════════ -->
+
+<pre><code>╔══════════════════════════════════════════════════════════════════╗
+║  SANTHOSH  ·  AI/ML Engineering Runtime  ·  ACTIVE    ║
+╚══════════════════════════════════════════════════════════════════╝
+</code></pre>
+<p><a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=16&pause=1000&color=C9184A&center=true&vCenter=true&width=680&lines=%5BSYS%5D+Booting+AI+Engineering+Runtime...;%5BAGENT%5D+LangGraph+Orchestration+%E2%86%92+ONLINE;%5BRAG%5D+Hybrid+Retrieval+Engine+%E2%86%92+READY;%5BDEPLOY%5D+Docker+Compose+Mesh+%E2%86%92+RUNNING;%5BCI%2FCD%5D+GitHub+Actions+Pipeline+%E2%86%92+PASSING;%5BSTATUS%5D+Accepting+Mission-Critical+Problems" alt="Typing SVG"></a></p>
+<br>
+
+<p><a href="https://github.com/Santhosh-p653"><img src="https://img.shields.io/badge/%E2%94%80%E2%94%80%20GitHub-Santhosh--p653%20%E2%94%80%E2%94%80-C9184A?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"></a>
+<a href="https://santhosh-p653.github.io/doc2site/Santhosh.html"><img src="https://img.shields.io/badge/%E2%94%80%E2%94%80%20Portfolio-LIVE%20%E2%94%80%E2%94%80-C9184A?style=for-the-badge&logo=vercel&logoColor=white" alt="Portfolio"></a>
+<a href="https://huggingface.co/spaces/santhosh11042007/shoppyai"><img src="https://img.shields.io/badge/%E2%94%80%E2%94%80%20HuggingFace-Demo%20%E2%94%80%E2%94%80-C9184A?style=for-the-badge&logo=huggingface&logoColor=white" alt="HuggingFace"></a></p>
+</div>
+
+<hr>
+<div align="center">
+
+<pre><code class="language-bash">$ whoami
+</code></pre>
+</div>
+
+<pre><code>┌─────────────────────────────────────────────────────────────────────┐
+│  IDENTITY BLOCK                                                     │
+│  ─────────────────────────────────────────────────────────────────  │
+│  Role    :  AI / ML Engineer                                        │
+│  Focus   :  Agentic systems · RAG pipelines · Production MLOps      │
+│  Output  :  Deployed systems — not prototypes                       │
+│  Mantra  :  &quot;Make it work. Make it right. Make it fast.&quot;            │
+└─────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<br>
+
+<hr>
+<h2><code>$ developer-os --describe</code></h2>
+<blockquote>
+<p>A self-operating system for turning ambiguous problems into deployed AI infrastructure.</p>
+</blockquote>
+<pre><code>╔════════════════════════════════════════════════════════════════════════╗
+║                  SANTHOSH ENGINEER OS  ·  RUNTIME SPEC               ║
+╠══════════════╦═════════════════════════════════════════════════════════╣
+║   INPUT      ║  Problem statements · Research papers · Broken systems ║
+╠══════════════╬═════════════════════════════════════════════════════════╣
+║  PROCESSOR   ║  Agentic reasoning (LangGraph)                         ║
+║              ║  System design thinking → microservice decomposition   ║
+║              ║  Architecture-first, code-second approach              ║
+╠══════════════╬═════════════════════════════════════════════════════════╣
+║   MEMORY     ║  Qdrant / ChromaDB vector stores                       ║
+║              ║  BM25 sparse retrieval + dense embedding fusion        ║
+║              ║  Past project patterns as reusable mental models       ║
+╠══════════════╬═════════════════════════════════════════════════════════╣
+║   OUTPUT     ║  Containerized · CI/CD-wired · Security-hardened       ║
+║              ║  JSON-logged · Rate-limited · Production-ready         ║
+╠══════════════╬═════════════════════════════════════════════════════════╣
+║  OS TRAITS   ║  ✓ Docker from commit one                              ║
+║              ║  ✓ GitHub Actions in every repo                        ║
+║              ║  ✓ Agents / API / ML as separate bounded services      ║
+║              ║  ✓ Security baked in — never bolted on                 ║
+╚══════════════╩═════════════════════════════════════════════════════════╝
+</code></pre>
+<hr>
+<h2><code>$ skills --deep</code></h2>
+<div align="center">
+
+<pre><code>LOADING MODULE REGISTRY...  ████████████████████████  100%
+</code></pre>
+</div>
+
+<br>
+
+<p><strong><code>[MODULE 01]</code>  AI CORE ENGINE</strong></p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Tech</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Agent Orchestration</td>
+<td>LangGraph · LangChain</td>
+<td>🟢 ACTIVE</td>
+</tr>
+<tr>
+<td>Vision &amp; Detection</td>
+<td>PyTorch · OpenCV · Transformers</td>
+<td>🟢 ACTIVE</td>
+</tr>
+<tr>
+<td>STT · Multi-language</td>
+<td>Whisper · Sarvam AI Saaras v3</td>
+<td>🟢 ACTIVE</td>
+</tr>
+<tr>
+<td>TTS Synthesis</td>
+<td>edge-tts · Neural Voices</td>
+<td>🟢 ACTIVE</td>
+</tr>
+</tbody></table>
+<br>
+
+<p><strong><code>[MODULE 02]</code>  DATA &amp; RETRIEVAL LAYER</strong></p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Tech</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Vector Store</td>
+<td>Qdrant · ChromaDB · FAISS</td>
+<td>🟢 ACTIVE</td>
+</tr>
+<tr>
+<td>Sparse Retrieval</td>
+<td>BM25 · Reciprocal Rank Fusion</td>
+<td>🟢 ACTIVE</td>
+</tr>
+<tr>
+<td>Document Ingestion</td>
+<td>MarkItDown · PDF · DOCX · PPTX</td>
+<td>🟢 ACTIVE</td>
+</tr>
+<tr>
+<td>Embedding Models</td>
+<td>MiniLM-L6 · HuggingFace Hub</td>
+<td>🟢 ACTIVE</td>
+</tr>
+</tbody></table>
+<br>
+
+<p><strong><code>[MODULE 03]</code>  BACKEND SYSTEMS</strong></p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Tech</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>API Framework</td>
+<td>FastAPI</td>
+<td>🟢 ACTIVE</td>
+</tr>
+<tr>
+<td>Primary Language</td>
+<td>Python</td>
+<td>🟢 ACTIVE</td>
+</tr>
+<tr>
+<td>Relational Store</td>
+<td>PostgreSQL</td>
+<td>🟢 ACTIVE</td>
+</tr>
+<tr>
+<td>Object Storage</td>
+<td>MinIO</td>
+<td>🟢 ACTIVE</td>
+</tr>
+</tbody></table>
+<br>
+
+<p><strong><code>[MODULE 04]</code>  INFRASTRUCTURE &amp; DEVOPS</strong></p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Tech</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Containerization</td>
+<td>Docker · Docker Compose</td>
+<td>🟢 ACTIVE</td>
+</tr>
+<tr>
+<td>CI / CD Pipelines</td>
+<td>GitHub Actions</td>
+<td>🟢 ACTIVE</td>
+</tr>
+<tr>
+<td>Security Scanning</td>
+<td>Bandit · detect-secrets · ruff</td>
+<td>🟢 ACTIVE</td>
+</tr>
+<tr>
+<td>Log Monitoring</td>
+<td>Dozzle · JSON stdout</td>
+<td>🟢 ACTIVE</td>
+</tr>
+</tbody></table>
+<br>
+
+<p><strong><code>[MODULE 05]</code>  FRONTEND &amp; UX</strong></p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Tech</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Web Framework</td>
+<td>Next.js · TypeScript</td>
+<td>🟢 ACTIVE</td>
+</tr>
+<tr>
+<td>Rapid Prototyping</td>
+<td>Gradio</td>
+<td>🟢 ACTIVE</td>
+</tr>
+<tr>
+<td>Static Generation</td>
+<td>Node.js · GitHub Pages</td>
+<td>🟢 ACTIVE</td>
+</tr>
+<tr>
+<td>Runtime</td>
+<td>Linux</td>
+<td>🟢 ACTIVE</td>
+</tr>
+</tbody></table>
+<hr>
+<h2><code>$ projects --list --verbose</code></h2>
+<div align="center">
+
+<pre><code>SCANNING PROJECT REGISTRY...  4 SYSTEMS FOUND
+</code></pre>
+</div>
+
+<hr>
+<h3><code>[SYS-01]</code> 🕵️ deepfake-agentic-ai</h3>
+<p><img src="https://img.shields.io/badge/STATUS-%F0%9F%9F%A2%20DEPLOYED-1a0d0f?style=flat-square&color=1a0d0f&labelColor=1a0d0f" alt="Status">
+<a href="https://github.com/Santhosh-p653/deepfake-agentic-ai"><img src="https://img.shields.io/badge/REPO-VIEW%20SOURCE-C9184A?style=flat-square&logo=github&logoColor=white" alt="Repo"></a></p>
+<p><strong>Problem:</strong> Deepfake media is proliferating faster than detection tooling can scale. Existing solutions are monolithic and brittle — one model, one failure point, no auditability.</p>
+<p><strong>Solution:</strong> Forensic deepfake detection architected as a production microservices mesh.</p>
+<pre><code>PIPELINE FLOW:
+
+  [UPLOAD]──►[API Gateway]──►[Agent Orchestrator]──►[ML Service]
+                                      │                    │
+                               [ChromaDB]◄──────────[RetinaFace]
+                                      │             [Xception CNN]
+                               [PostgreSQL]         [Transformers]
+                                      │
+                               [MinIO Object Store]──►[Auto-Expiry 30d]
+</code></pre>
+<pre><code>AUDIT TRAIL:
+pending → temp_stored → processing → processed → deleted
+</code></pre>
+<pre><code>Stack:  Python · FastAPI · LangGraph · Docker Compose
+        PostgreSQL · ChromaDB · MinIO · RetinaFace · Xception
+CI/CD:  GitHub Actions  ·  network audit  ·  logging validation
+</code></pre>
+<blockquote>
+<p><strong>Architecture:</strong> Multi-Dockerfile services (<code>Dockerfile.api</code> / <code>Dockerfile.agents</code> / <code>Dockerfile.ml</code>) sharing a single <code>docker-compose.yml</code>. JSON-structured logging across every module with live Dozzle viewer.</p>
+</blockquote>
+<hr>
+<h3><code>[SYS-02]</code> 🧠 rag-multimodal-assistant</h3>
+<p><img src="https://img.shields.io/badge/STATUS-%F0%9F%9F%A2%20DEPLOYED-1a0d0f?style=flat-square&color=1a0d0f&labelColor=1a0d0f" alt="Status">
+<a href="https://github.com/Santhosh-p653/rag-multimodal-assistant"><img src="https://img.shields.io/badge/REPO-VIEW%20SOURCE-C9184A?style=flat-square&logo=github&logoColor=white" alt="Repo"></a></p>
+<p><strong>Problem:</strong> Enterprise manuals exist in a graveyard of PDFs and PPTX files. Users either search manually or get generic LLM hallucinations. No voice support for Indic languages. No agentic troubleshooting.</p>
+<p><strong>Solution:</strong> Production RAG system with hybrid search, voice layer, and LangGraph-powered diagnostic engine.</p>
+<pre><code>INGESTION PIPELINE:
+
+  [PDF·DOCX·PPTX·XLSX·TXT]
+         │
+   [MarkItDown Parser]
+         │
+   [Chunker + Overlap Windows]
+         │
+   [MiniLM-L6 Embeddings]
+         │
+   [Qdrant Vector Store]
+
+
+RETRIEVAL ENGINE (3-level priority):
+
+  [Query]──►[Exact Match]──►[Family Match]──►[Global Match]
+                │                │                │
+           [Dense Vec]      [BM25 Sparse]    [RRF Fusion]──►[LLM]
+
+
+VOICE LAYER:
+
+  [English Audio]──►[Whisper STT]──►[Response]──►[edge-tts]
+  [Indic Audio]───►[Sarvam Saaras v3]──►[Response]──►[edge-tts]
+
+
+SECURITY STACK:
+
+  slowapi rate limiting · MIME-type guards · regex prompt injection
+  isolated RAG prompts · 24-test suite (unit + integration + security)
+</code></pre>
+<pre><code>Stack:  Python · FastAPI · LangGraph · Qdrant · BM25 · MiniLM-L6
+        Whisper · Sarvam AI · edge-tts · Next.js · TypeScript · Docker
+CI/CD:  GitHub Actions  ·  ruff  ·  black  ·  bandit  ·  detect-secrets
+</code></pre>
+<blockquote>
+<p><strong>Architecture:</strong> Full-stack monorepo (<code>backend/</code> + <code>frontend/</code>). Prompt injection filtered at both the regex layer and the LLM system prompt level. Admin upload panel in Next.js.</p>
+</blockquote>
+<hr>
+<h3><code>[SYS-03]</code> 🛒 shoppyai</h3>
+<p><img src="https://img.shields.io/badge/STATUS-%F0%9F%9A%80%20LIVE-1a0d0f?style=flat-square&color=1a0d0f&labelColor=1a0d0f" alt="Status">
+<a href="https://github.com/Santhosh-p653/shoppyai"><img src="https://img.shields.io/badge/REPO-VIEW%20SOURCE-C9184A?style=flat-square&logo=github&logoColor=white" alt="Repo"></a>
+<a href="https://huggingface.co/spaces/santhosh11042007/shoppyai"><img src="https://img.shields.io/badge/DEMO-LIVE%20%E2%86%97-C9184A?style=flat-square&logo=huggingface&logoColor=white" alt="Demo"></a></p>
+<p><strong>Problem:</strong> E-commerce discovery still relies on keyword search. Users describe what they want in natural language — the product catalog doesn&#39;t speak that.</p>
+<p><strong>Solution:</strong> LLM-powered natural language product discovery deployed publicly on Hugging Face Spaces.</p>
+<pre><code>ARCHITECTURE:
+
+  [User Query (NL)]──►[Gradio UI Layer (app.py)]
+                              │
+                       [Inference Logic]──►[LLM API]
+                              │
+                       [Data Layer]──►[FAISS / ChromaDB ready]
+                              │
+                       [Docker Container]──►[HF Spaces]
+</code></pre>
+<pre><code>Stack:  Python · Gradio · Transformers / LLM APIs · Docker · HF Spaces
+CI/CD:  GitHub Actions
+</code></pre>
+<blockquote>
+<p><strong>Architecture:</strong> Prompt-orchestration-first design, modular for async inference and vector DB integration with zero structural changes.</p>
+</blockquote>
+<hr>
+<h3><code>[SYS-04]</code> 📄 doc2site</h3>
+<p><img src="https://img.shields.io/badge/STATUS-%F0%9F%9F%A2%20DEPLOYED-1a0d0f?style=flat-square&color=1a0d0f&labelColor=1a0d0f" alt="Status">
+<a href="https://github.com/Santhosh-p653/doc2site"><img src="https://img.shields.io/badge/REPO-VIEW%20SOURCE-C9184A?style=flat-square&logo=github&logoColor=white" alt="Repo"></a>
+<a href="https://santhosh-p653.github.io/doc2site/Santhosh.html"><img src="https://img.shields.io/badge/LIVE-PORTFOLIO%20%E2%86%97-C9184A?style=flat-square&logo=vercel&logoColor=white" alt="Live"></a></p>
+<p><strong>Problem:</strong> Markdown documentation has no navigable web presence without a full CMS or framework overhead.</p>
+<p><strong>Solution:</strong> Zero-config static site generator with incremental builds and auto-deploy on push.</p>
+<pre><code>CI/CD PIPELINE:
+
+  [Markdown Source]
+         │
+   [Node.js Build]──►[HTML + Dark Mode + Search]
+         │
+   [GitHub Actions]──►[GitHub Pages] (on every push)
+         │
+   [Incremental]──►[Only changed files regenerated]
+</code></pre>
+<pre><code>Stack:  JavaScript · Node.js · GitHub Actions · GitHub Pages
+</code></pre>
+<hr>
+<h2><code>$ analytics --dashboard</code></h2>
+<div align="center">
+
+<pre><code>╔══════════════════════════════════════════════════════════════╗
+║              SYSTEM METRICS  ·  GITHUB TELEMETRY            ║
+╚══════════════════════════════════════════════════════════════╝
+</code></pre>
+<img height="170" src="https://github-readme-stats.vercel.app/api?username=Santhosh-p653&show_icons=true&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=C9184A&icon_color=C9184A&text_color=c9d1d9&rank_icon=github" />
+<img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Santhosh-p653&layout=compact&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=C9184A&text_color=c9d1d9&langs_count=8" />
+
+<br>
+
+<pre><code>  UPTIME (Activity)    ██████████████████░░  88%
+  THROUGHPUT (Commits) █████████████████░░░  84%
+  INFRA COVERAGE       ████████████████████  100%  (Docker on all projects)
+  CI/CD COVERAGE       ████████████████████  100%  (Actions on all repos)
+  SECURITY POSTURE     ██████████████████░░  Bandit · detect-secrets enabled
+</code></pre>
+<br>
+
+<img src="https://github-readme-streak-stats.herokuapp.com?user=Santhosh-p653&theme=tokyonight&hide_border=true&background=0d1117&ring=C9184A&fire=FF4D6D&currStreakLabel=C9184A" />
+
+<p><br><br></p>
+<p><a href="https://github.com/Santhosh-p653"><img src="https://github-readme-activity-graph.vercel.app/graph?username=Santhosh-p653&theme=react-dark&hide_border=true&bg_color=0d1117&color=C9184A&line=00d9ff&point=ffffff" alt="Activity Graph"></a></p>
+</div>
+
+<hr>
+<h2><code>$ standards --list</code></h2>
+<blockquote>
+<p>Every system in this portfolio ships with the same non-negotiables.</p>
+</blockquote>
+<pre><code>╔═══════════════════════════════════════════════════════════════╗
+║  ENGINEERING INVARIANTS                                       ║
+╠═══════════════════════════════════════════════════════════════╣
+║  [✓]  Containerized from commit one — Docker / Compose       ║
+║  [✓]  CI/CD in every repo — lint · security · deploy         ║
+║  [✓]  JSON structured logging — stdout, never print()        ║
+║  [✓]  Security-first APIs — rate limit · MIME guard · scan   ║
+║  [✓]  Separation of concerns — agents ≠ API ≠ ML             ║
+╚═══════════════════════════════════════════════════════════════╝
+</code></pre>
+<hr>
+<div align="center">
+
+<h2><code>$ connect --open-to-work</code></h2>
+<pre><code>// Open to roles in AI engineering, MLOps, and agentic systems.
+// I build production systems, not demos. Let&#39;s build.
+</code></pre>
+<br>
+
+<p><a href="https://linkedin.com/in/YOUR_LINKEDIN"><img src="https://img.shields.io/badge/%E2%94%80%E2%94%80%20LinkedIn%20%E2%94%80%E2%94%80-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"></a>
+<a href="https://github.com/Santhosh-p653"><img src="https://img.shields.io/badge/%E2%94%80%E2%94%80%20GitHub%20%E2%94%80%E2%94%80-ffffff?style=for-the-badge&logo=github&logoColor=black" alt="GitHub"></a>
+<a href="https://santhosh-p653.github.io/doc2site/Santhosh.html"><img src="https://img.shields.io/badge/%E2%94%80%E2%94%80%20Portfolio%20%E2%94%80%E2%94%80-C9184A?style=for-the-badge&logo=vercel&logoColor=white" alt="Portfolio"></a></p>
+<br>
+
+<p><img src="https://komarev.com/ghpvc/?username=Santhosh-p653&style=for-the-badge&color=C9184A&label=PROFILE+VIEWS" alt="Profile Views"></p>
+<br>
+
+<pre><code>╔══════════════════════════════════════════════════════════════════╗
+║  SANTHOSH.OS  ·  SYSTEM HALT  ·  All services nominal.  ✓      ║
+╚══════════════════════════════════════════════════════════════════╝
+</code></pre>
+</div>
+
+</div>
+<script>var toggle = document.getElementById("themeToggle");var saved = localStorage.getItem("theme");if (saved === "dark") { document.body.classList.add("dark"); toggle.textContent = "☀️ Light"; }toggle.addEventListener("click", function() {  document.body.classList.toggle("dark");  var isDark = document.body.classList.contains("dark");  localStorage.setItem("theme", isDark ? "dark" : "light");  toggle.textContent = isDark ? "☀️ Light" : "🌙 Dark";});var searchBox = document.getElementById("searchBox");var searchResults = document.getElementById("searchResults");fetch("/doc2site/routes.json").then(function(r) { return r.json(); }).then(function(routes) {  searchBox.addEventListener("input", function() {    var q = searchBox.value.toLowerCase().trim();    if (!q) { searchResults.style.display = "none"; return; }    var matches = routes.filter(function(r) { return r.title.toLowerCase().includes(q); });    if (matches.length === 0) { searchResults.style.display = "none"; return; }    searchResults.innerHTML = matches.map(function(r) { return "<a href=" + r.url + ">" + r.title + "</a>"; }).join("");    searchResults.style.display = "block";  });  document.addEventListener("click", function(e) { if (!searchBox.contains(e.target)) searchResults.style.display = "none"; });});</script>
+</body>
+</html>
