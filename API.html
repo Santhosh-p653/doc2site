@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>API — doc2site</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f9fafb; --text: #1a1a2e; --nav-bg: #1a1a2e; --nav-link: #a0c4ff;
+  --container-bg: #ffffff; --shadow: rgba(0,0,0,0.08); --code-bg: #f0f4ff;
+  --pre-bg: #1e1e2e; --pre-text: #cdd6f4; --blockquote-bg: #f0f4ff;
+  --border: #e0e0e0; --h1-border: #a0c4ff; --search-bg: #ffffff;
+  --search-border: #ccc;
+}
+body.dark {
+  --bg: #0f0f1a; --text: #e0e0f0; --nav-bg: #0a0a14; --nav-link: #7eb8ff;
+  --container-bg: #1a1a2e; --shadow: rgba(0,0,0,0.4); --code-bg: #2a2a3e;
+  --pre-bg: #0d0d1a; --pre-text: #cdd6f4; --blockquote-bg: #1e1e32;
+  --border: #2a2a3e; --h1-border: #7eb8ff; --search-bg: #1a1a2e;
+  --search-border: #3a3a5e;
+}
+body { font-family: "Segoe UI", system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; transition: background 0.3s, color 0.3s; }
+nav { background: var(--nav-bg); padding: 14px 40px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px var(--shadow); }
+.nav-brand { color: #ffffff; font-weight: 700; font-size: 1.1rem; text-decoration: none; margin-right: 10px; }
+nav a { color: var(--nav-link); text-decoration: none; font-size: 0.9rem; font-weight: 500; padding: 4px 10px; border-radius: 20px; transition: background 0.2s, color 0.2s; }
+nav a:hover { background: rgba(160,196,255,0.15); color: #ffffff; }
+.nav-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.search-box { padding: 6px 14px; border-radius: 20px; border: 1px solid var(--search-border); background: var(--search-bg); color: var(--text); font-size: 0.85rem; width: 200px; outline: none; }
+.search-results { position: absolute; top: 54px; right: 40px; background: var(--container-bg); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px var(--shadow); width: 260px; z-index: 200; display: none; overflow: hidden; }
+.search-results a { display: block; padding: 10px 16px; color: var(--text); text-decoration: none; font-size: 0.9rem; border-bottom: 1px solid var(--border); }
+.search-results a:hover { background: var(--code-bg); }
+.theme-toggle { background: none; border: 1px solid var(--nav-link); color: var(--nav-link); border-radius: 20px; padding: 4px 12px; cursor: pointer; font-size: 0.85rem; }
+.theme-toggle:hover { background: var(--nav-link); color: #1a1a2e; }
+.container { max-width: 860px; margin: 48px auto; padding: 48px; background: var(--container-bg); border-radius: 16px; box-shadow: 0 4px 24px var(--shadow); }
+h1 { font-size: 2.4rem; font-weight: 800; margin-bottom: 16px; border-bottom: 3px solid var(--h1-border); padding-bottom: 12px; }
+h2 { font-size: 1.6rem; font-weight: 700; margin: 36px 0 12px; }
+h3 { font-size: 1.2rem; font-weight: 600; margin: 24px 0 8px; }
+p { font-size: 1rem; margin-bottom: 16px; }
+a { color: #0066cc; }
+code { background: var(--code-bg); padding: 2px 7px; border-radius: 4px; font-size: 0.88rem; font-family: "Courier New", monospace; color: #d63384; }
+pre { background: var(--pre-bg); color: var(--pre-text); padding: 20px; border-radius: 10px; overflow-x: auto; margin-bottom: 20px; }
+pre code { background: none; color: inherit; padding: 0; }
+ul, ol { padding-left: 24px; margin-bottom: 16px; }
+li { margin-bottom: 6px; }
+blockquote { border-left: 4px solid var(--h1-border); padding: 12px 20px; background: var(--blockquote-bg); border-radius: 0 10px 10px 0; margin-bottom: 16px; font-style: italic; }
+table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+th { background: var(--nav-bg); color: #fff; padding: 10px 14px; text-align: left; }
+td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+tr:nth-child(even) { background: var(--code-bg); }
+img { max-width: 100%; border-radius: 10px; margin: 16px 0; }
+hr { border: none; border-top: 2px solid var(--border); margin: 32px 0; }
+@media (max-width: 600px) { .container { padding: 24px 16px; margin: 16px; } nav { padding: 12px 16px; } .search-box { width: 130px; } h1 { font-size: 1.8rem; } }
+
+</style>
+</head>
+<body>
+<nav>
+<a class="nav-brand" href="/doc2site/">doc2site</a>
+<a href="/doc2site/API.html">API</a><a href="/doc2site/Santhosh P.html">Santhosh P</a><a href="/doc2site/Santhosh.html">Santhosh</a><a href="/doc2site/getting-started.html">getting-started</a><a href="/doc2site/hello.html">hello</a><a href="/doc2site/nature.html">nature</a>
+<div class="nav-right">
+<input class="search-box" id="searchBox" type="text" placeholder="Search pages..." />
+<div class="search-results" id="searchResults"></div>
+<button class="theme-toggle" id="themeToggle">🌙 Dark</button>
+</div>
+</nav>
+<div class="container">
+<h1>OCTO-RAG Assistant &amp; Diagnostic Server — API Documentation</h1>
+<p>Comprehensive, authoritative technical reference for the <strong>OCTO-RAG</strong> REST API gateway and native <strong>Model Context Protocol (MCP)</strong> diagnostic server.</p>
+<hr>
+<h2>Table of Contents</h2>
+<ol>
+<li><a href="#1-api-overview">API Overview</a></li>
+<li><a href="#2-base-url--server-configuration">Base URL &amp; Server Configuration</a></li>
+<li><a href="#3-api-conventions--protocols">API Conventions &amp; Protocols</a></li>
+<li><a href="#4-endpoint-reference-matrix">Endpoint Reference Matrix</a></li>
+<li><a href="#5-chat--streaming-apis">Chat &amp; Streaming APIs</a><ul>
+<li><a href="#post-chat">POST /chat</a></li>
+<li><a href="#post-chatstream">POST /chat/stream</a></li>
+</ul>
+</li>
+<li><a href="#6-document-ingestion--file-management">Document Ingestion &amp; File Management</a><ul>
+<li><a href="#post-upload">POST /upload</a></li>
+<li><a href="#get-files">GET /files</a></li>
+<li><a href="#delete-filesfilename">DELETE /files/{filename}</a></li>
+<li><a href="#post-adminreset">POST /admin/reset</a></li>
+<li><a href="#get-products">GET /products</a></li>
+<li><a href="#get-debug_qdrant">GET /debug_qdrant</a></li>
+</ul>
+</li>
+<li><a href="#7-agent-execution-api">Agent Execution API</a><ul>
+<li><a href="#post-agentrun">POST /agent/run</a></li>
+</ul>
+</li>
+<li><a href="#8-troubleshooting--session-management">Troubleshooting &amp; Session Management</a><ul>
+<li><a href="#post-troubleshoot">POST /troubleshoot</a></li>
+<li><a href="#get-sessions">GET /sessions</a></li>
+<li><a href="#post-sessions">POST /sessions</a></li>
+<li><a href="#get-sessionssession_id">GET /sessions/{session_id}</a></li>
+<li><a href="#delete-sessionssession_id">DELETE /sessions/{session_id}</a></li>
+</ul>
+</li>
+<li><a href="#9-voice--speech-apis">Voice &amp; Speech APIs</a><ul>
+<li><a href="#post-transcribe">POST /transcribe</a></li>
+<li><a href="#post-speak">POST /speak</a></li>
+</ul>
+</li>
+<li><a href="#10-document-image--media-asset-api">Document Image &amp; Media Asset API</a><ul>
+<li><a href="#get-document-imagesdocument_idimage_id">GET /document-images/{document_id}/{image_id}</a></li>
+</ul>
+</li>
+<li><a href="#11-system-telemetry--health-checks">System Telemetry &amp; Health Checks</a><ul>
+<li><a href="#get-health">GET /health</a></li>
+<li><a href="#get-healthllm">GET /health/llm</a></li>
+</ul>
+</li>
+<li><a href="#12-model-context-protocol-mcp-integration">Model Context Protocol (MCP) Integration</a><ul>
+<li><a href="#architecture--protocol-mount">Architecture &amp; Protocol Mount</a></li>
+<li><a href="#tool-1-search_fridge_manuals">Tool 1: search_fridge_manuals</a></li>
+<li><a href="#tool-2-lookup_error_code">Tool 2: lookup_error_code</a></li>
+<li><a href="#tool-3-get_thermistor_ohm_table">Tool 3: get_thermistor_ohm_table</a></li>
+<li><a href="#tool-4-lookup_part_number">Tool 4: lookup_part_number</a></li>
+<li><a href="#tool-5-run_octo_agent">Tool 5: run_octo_agent</a></li>
+<li><a href="#tool-6-troubleshoot_appliance_turn">Tool 6: troubleshoot_appliance_turn</a></li>
+</ul>
+</li>
+<li><a href="#13-security-domain-boundaries--rate-limiting">Security, Domain Boundaries &amp; Rate Limiting</a></li>
+<li><a href="#14-error-handling--http-status-codes">Error Handling &amp; HTTP Status Codes</a></li>
+<li><a href="#15-end-to-end-api-workflows">End-to-End API Workflows</a></li>
+<li><a href="#16-verification--testing-guide">Verification &amp; Testing Guide</a></li>
+<li><a href="#17-interactive-api-explorers-swagger--redoc">Interactive API Explorers (Swagger &amp; ReDoc)</a></li>
+<li><a href="#18-api-changelog">API Changelog</a></li>
+</ol>
+<hr>
+<h2>1. API Overview</h2>
+<p>OCTO-RAG provides an asynchronous backend microservice built with <strong>FastAPI</strong> (<code>v3.0.0</code>) designed for enterprise appliance maintenance, field technician support, and diagnostic intelligence. The service unifies:</p>
+<ul>
+<li><strong>Multimodal RAG Retrieval</strong>: Dense vector search (SentenceTransformers <code>all-MiniLM-L6-v2</code>) combined with sparse in-memory BM25 scoring via Reciprocal Rank Fusion (RRF, $k=60$) across 3 waterfall tiers (<code>Exact Product</code> $\rightarrow$ <code>Family Prefix</code> $\rightarrow$ <code>Global Manuals</code>).</li>
+<li><strong>Google SigLIP 2 Vision Retrieval</strong>: Semantic cross-modal indexing and query-to-diagram matching for technical electrical diagrams and CAD schematics.</li>
+<li><strong>Stateful Troubleshooting Engine</strong>: SOP-guided diagnostic progression (<code>START</code> $\rightarrow$ <code>IDENTIFY_PRODUCT</code> $\rightarrow$ <code>RETRIEVE_KNOWLEDGE</code> $\rightarrow$ <code>DIAGNOSE</code> $\rightarrow$ <code>QUESTION</code> $\rightarrow$ <code>ACTION</code> $\rightarrow$ <code>VERIFY</code> $\rightarrow$ <code>RESOLVED</code>/<code>ESCALATE</code>).</li>
+<li><strong>Resilient Hybrid LLM Gateway</strong>: Local offline Ollama prioritization (<code>qwen2.5:3b</code>, <code>gemma3:4b</code>, <code>llama3.2:3b</code>) with automated fallback to cloud inference engines (Groq <code>qwen/qwen3.8-27b</code>, SambaNova <code>Meta-Llama-3.3-70B-Instruct</code>).</li>
+<li><strong>Hybrid Multilingual Voice Support</strong>: Local <code>faster-whisper</code> (<code>int8</code> CPU) alongside Sarvam AI (<code>Saaras v3</code>) for Indic regional transcription, and Microsoft <code>edge-tts</code> / Sarvam AI (<code>Bulbul v3</code>) for neural text-to-speech.</li>
+<li><strong>Model Context Protocol (MCP)</strong>: Native FastMCP implementation exposing diagnostic tools over Server-Sent Events (<code>/mcp/sse</code>) and standard I/O for Claude Desktop and IDEs.</li>
+</ul>
+<hr>
+<h2>2. Base URL &amp; Server Configuration</h2>
+<h3>Default Development Base URLs</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Service / Interface</th>
+<th align="left">Base URL</th>
+<th align="left">Transport</th>
+<th align="left">Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>REST API Server</strong></td>
+<td align="left"><code>http://127.0.0.1:8000</code> or <code>http://localhost:8000</code></td>
+<td align="left">HTTP / HTTPS</td>
+<td align="left">FastAPI ASGI application (<code>uvicorn app.main:app</code>)</td>
+</tr>
+<tr>
+<td align="left"><strong>MCP SSE Endpoint</strong></td>
+<td align="left"><code>http://127.0.0.1:8000/mcp/sse</code></td>
+<td align="left">HTTP SSE</td>
+<td align="left">Model Context Protocol SSE stream</td>
+</tr>
+<tr>
+<td align="left"><strong>Frontend Web Console</strong></td>
+<td align="left"><code>http://localhost:3000</code></td>
+<td align="left">HTTP</td>
+<td align="left">Next.js 14 Web Application</td>
+</tr>
+</tbody></table>
+<h3>Network &amp; Startup Architecture</h3>
+<ul>
+<li><strong>Lifespan Initialization</strong>: On boot, FastAPI executes a warmup routine (<code>lifespan</code>) pre-loading both text (<code>SentenceTransformer</code>) and vision (<code>SigLIP 2</code>) models into memory to prevent latency spikes on first client requests.</li>
+<li><strong>CORS Policy</strong>: Configured via <code>CORSMiddleware</code>. By default, origins are constrained to <code>http://localhost:3000</code> with <code>allow_credentials=True</code>, <code>allow_methods=[&quot;*&quot;]</code>, and <code>allow_headers=[&quot;*&quot;]</code>.</li>
+<li><strong>Authentication</strong>: <code>Not specified in the current implementation</code>. All routes are accessed unauthenticated at the transport layer, with network protection provided by IP rate limiters and origin filtering.</li>
+</ul>
+<hr>
+<h2>3. API Conventions &amp; Protocols</h2>
+<ul>
+<li><strong>Content-Type</strong>:<ul>
+<li>Request payloads default to <code>application/json</code> unless handling binary audio or multipart file ingestion (<code>multipart/form-data</code>).</li>
+<li>Response payloads default to <code>application/json; charset=utf-8</code>.</li>
+<li>Streaming endpoints utilize <code>text/event-stream</code>.</li>
+<li>Speech endpoints return raw binary audio (<code>audio/mpeg</code> or <code>audio/wav</code>).</li>
+</ul>
+</li>
+<li><strong>Character Encoding</strong>: UTF-8 throughout all string attributes.</li>
+<li><strong>Rate Limit Headers</strong>: Managed via <code>slowapi</code> (<code>get_remote_address</code>). Rate-limit headers (e.g., <code>X-RateLimit-Limit</code>, <code>X-RateLimit-Remaining</code>, <code>X-RateLimit-Reset</code>) are sent with HTTP responses. If exhausted, status code <code>429 Too Many Requests</code> is returned.</li>
+<li><strong>Domain Boundaries</strong>: Technical queries submitted to <code>/chat</code>, <code>/chat/stream</code>, <code>/troubleshoot</code>, and <code>/agent/run</code> pass through a Pre-LLM gateway regex filter. Inquiries outside the refrigerator and cooling appliance domain are immediately rejected with <code>400 Bad Request</code>, consuming 0 LLM tokens.</li>
+</ul>
+<hr>
+<h2>4. Endpoint Reference Matrix</h2>
+<table>
+<thead>
+<tr>
+<th align="left">Method</th>
+<th align="left">Endpoint Path</th>
+<th align="left">Primary Purpose</th>
+<th align="left">Rate Limit</th>
+<th align="left">Request Format</th>
+<th align="left">Response Model / Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>GET</code></td>
+<td align="left"><code>/health</code></td>
+<td align="left">Server &amp; vector count health check</td>
+<td align="left">None</td>
+<td align="left">None</td>
+<td align="left"><code>HealthResponse</code> (JSON)</td>
+</tr>
+<tr>
+<td align="left"><code>GET</code></td>
+<td align="left"><code>/health/llm</code></td>
+<td align="left">Detailed LLM telemetry &amp; fallback status</td>
+<td align="left">None</td>
+<td align="left">None</td>
+<td align="left"><code>dict</code> (JSON)</td>
+</tr>
+<tr>
+<td align="left"><code>GET</code></td>
+<td align="left"><code>/files</code></td>
+<td align="left">List all unique ingested manual files</td>
+<td align="left">None</td>
+<td align="left">None</td>
+<td align="left"><code>{&quot;files&quot;: [...]}</code> (JSON)</td>
+</tr>
+<tr>
+<td align="left"><code>DELETE</code></td>
+<td align="left"><code>/files/{filename}</code></td>
+<td align="left">Completely delete a manual, vectors &amp; images</td>
+<td align="left">None</td>
+<td align="left">Path Parameter</td>
+<td align="left"><code>{&quot;status&quot;: ..., &quot;filename&quot;: ...}</code></td>
+</tr>
+<tr>
+<td align="left"><code>POST</code></td>
+<td align="left"><code>/admin/reset</code></td>
+<td align="left">Complete database &amp; storage hard reset</td>
+<td align="left">None</td>
+<td align="left">None</td>
+<td align="left"><code>{&quot;status&quot;: ..., &quot;message&quot;: ...}</code></td>
+</tr>
+<tr>
+<td align="left"><code>GET</code></td>
+<td align="left"><code>/debug_qdrant</code></td>
+<td align="left">Vector distribution by document payload</td>
+<td align="left">None</td>
+<td align="left">None</td>
+<td align="left"><code>{&quot;total&quot;: ..., &quot;sources_count&quot;: ...}</code></td>
+</tr>
+<tr>
+<td align="left"><code>GET</code></td>
+<td align="left"><code>/products</code></td>
+<td align="left">List all unique product models in index</td>
+<td align="left">None</td>
+<td align="left">None</td>
+<td align="left"><code>{&quot;products&quot;: [...]}</code> (JSON)</td>
+</tr>
+<tr>
+<td align="left"><code>POST</code></td>
+<td align="left"><code>/chat</code></td>
+<td align="left">Standard multi-turn grounded RAG chat</td>
+<td align="left"><code>20/minute</code></td>
+<td align="left"><code>ChatRequest</code> (JSON)</td>
+<td align="left"><code>ChatResponse</code> (JSON)</td>
+</tr>
+<tr>
+<td align="left"><code>POST</code></td>
+<td align="left"><code>/chat/stream</code></td>
+<td align="left">Low-latency token-streaming SSE endpoint</td>
+<td align="left"><code>30/minute</code></td>
+<td align="left"><code>ChatRequest</code> (JSON)</td>
+<td align="left"><code>text/event-stream</code> (SSE)</td>
+</tr>
+<tr>
+<td align="left"><code>POST</code></td>
+<td align="left"><code>/upload</code></td>
+<td align="left">Parse, chunk, embed &amp; index document</td>
+<td align="left"><code>60/minute</code></td>
+<td align="left"><code>multipart/form-data</code></td>
+<td align="left"><code>UploadResponse</code> (JSON)</td>
+</tr>
+<tr>
+<td align="left"><code>POST</code></td>
+<td align="left"><code>/transcribe</code></td>
+<td align="left">Convert speech audio to text (Whisper/Sarvam)</td>
+<td align="left"><code>60/minute</code></td>
+<td align="left"><code>multipart/form-data</code></td>
+<td align="left"><code>{&quot;text&quot;: ..., &quot;detected_language&quot;: ...}</code></td>
+</tr>
+<tr>
+<td align="left"><code>GET</code></td>
+<td align="left"><code>/document-images/{doc_id}/{img_id}</code></td>
+<td align="left">Retrieve extracted schematic image</td>
+<td align="left"><code>60/minute</code></td>
+<td align="left">Path Parameters</td>
+<td align="left"><code>FileResponse</code> (PNG/JPEG)</td>
+</tr>
+<tr>
+<td align="left"><code>POST</code></td>
+<td align="left"><code>/speak</code></td>
+<td align="left">Synthesize text to spoken audio (Edge/Sarvam)</td>
+<td align="left"><code>20/minute</code></td>
+<td align="left"><code>SpeakRequest</code> (JSON)</td>
+<td align="left">Binary Audio (<code>audio/mpeg</code> or <code>audio/wav</code>)</td>
+</tr>
+<tr>
+<td align="left"><code>POST</code></td>
+<td align="left"><code>/troubleshoot</code></td>
+<td align="left">Multi-turn state-guided SOP troubleshooting</td>
+<td align="left"><code>20/minute</code></td>
+<td align="left"><code>TroubleshootRequest</code></td>
+<td align="left">State Machine Response (JSON)</td>
+</tr>
+<tr>
+<td align="left"><code>POST</code></td>
+<td align="left"><code>/agent/run</code></td>
+<td align="left">Unified LangGraph execution pipeline</td>
+<td align="left"><code>10/minute</code></td>
+<td align="left"><code>AgentRequest</code> (JSON)</td>
+<td align="left"><code>AgentResponse</code> (JSON)</td>
+</tr>
+<tr>
+<td align="left"><code>GET</code></td>
+<td align="left"><code>/sessions</code></td>
+<td align="left">List saved conversation sessions by user</td>
+<td align="left">None</td>
+<td align="left">Query Parameter</td>
+<td align="left"><code>{&quot;sessions&quot;: [...]}</code> (JSON)</td>
+</tr>
+<tr>
+<td align="left"><code>GET</code></td>
+<td align="left"><code>/sessions/{session_id}</code></td>
+<td align="left">Retrieve specific session messages &amp; state</td>
+<td align="left">None</td>
+<td align="left">Path Parameter</td>
+<td align="left">Session State Dictionary (JSON)</td>
+</tr>
+<tr>
+<td align="left"><code>POST</code></td>
+<td align="left"><code>/sessions</code></td>
+<td align="left">Save or update conversation history</td>
+<td align="left">None</td>
+<td align="left"><code>SessionPayload</code> (JSON)</td>
+<td align="left"><code>{&quot;status&quot;: &quot;ok&quot;, &quot;session_id&quot;: ...}</code></td>
+</tr>
+<tr>
+<td align="left"><code>DELETE</code></td>
+<td align="left"><code>/sessions/{session_id}</code></td>
+<td align="left">Delete conversation session from store</td>
+<td align="left">None</td>
+<td align="left">Path Parameter</td>
+<td align="left"><code>{&quot;status&quot;: &quot;deleted&quot;, &quot;session_id&quot;: ...}</code></td>
+</tr>
+<tr>
+<td align="left"><code>GET</code></td>
+<td align="left"><code>/mcp/sse</code></td>
+<td align="left">FastMCP Server-Sent Events transport</td>
+<td align="left">None</td>
+<td align="left">None</td>
+<td align="left">MCP JSON-RPC over SSE</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. Chat &amp; Streaming APIs</h2>
+<h3>POST /chat</h3>
+<p>Executes the Phase 1 &amp; 2 RAG pipeline: Query Understanding $\rightarrow$ Prompt Guard $\rightarrow$ 3-Level Waterfall Hybrid Retrieval (Dense + BM25) $\rightarrow$ Confidence Evaluation $\rightarrow$ Prompt Construction $\rightarrow$ Unified LLM Generation.</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>POST</code></li>
+<li><strong>Path</strong>: <code>/chat</code></li>
+<li><strong>Rate Limit</strong>: <code>20/minute</code></li>
+<li><strong>Headers</strong>:<ul>
+<li><code>Content-Type: application/json</code></li>
+</ul>
+</li>
+</ul>
+<h4>Request Parameters</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Field</th>
+<th align="left">Type</th>
+<th align="left">Required</th>
+<th align="left">Constraints</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>message</code></td>
+<td align="left"><code>string</code></td>
+<td align="left"><strong>Yes</strong></td>
+<td align="left">Min 1 char, Max 4000 chars</td>
+<td align="left">The user inquiry, symptom, or technical question.</td>
+</tr>
+<tr>
+<td align="left"><code>source_file</code></td>
+<td align="left"><code>string</code></td>
+<td align="left">No</td>
+<td align="left">Default: <code>None</code></td>
+<td align="left">Restrict search exclusively to a specific manual file.</td>
+</tr>
+<tr>
+<td align="left"><code>session_id</code></td>
+<td align="left"><code>string</code></td>
+<td align="left">No</td>
+<td align="left">Default: <code>None</code></td>
+<td align="left">Session UUID for multi-turn clarification tracking.</td>
+</tr>
+</tbody></table>
+<h4>Request Example</h4>
+<pre><code class="language-json">{
+  &quot;message&quot;: &quot;What is the recommended freezer temperature setting?&quot;,
+  &quot;source_file&quot;: &quot;GE_Profile_Refrigerator.pdf&quot;,
+  &quot;session_id&quot;: &quot;9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d&quot;
+}
+</code></pre>
+<h4>Response Fields (<code>ChatResponse</code>)</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Field</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>answer</code></td>
+<td align="left"><code>string</code></td>
+<td align="left">Synthesized grounded answer or fallback guidance.</td>
+</tr>
+<tr>
+<td align="left"><code>sources</code></td>
+<td align="left"><code>list[string]</code></td>
+<td align="left">Distinct source manual citations associated with answer context.</td>
+</tr>
+<tr>
+<td align="left"><code>needs_clarification</code></td>
+<td align="left"><code>boolean</code></td>
+<td align="left"><code>true</code> if query was ambiguous or product mismatch requires input.</td>
+</tr>
+<tr>
+<td align="left"><code>clarification_question</code></td>
+<td align="left"><code>string</code> or <code>null</code></td>
+<td align="left">Specific clarification prompt when <code>needs_clarification</code> is <code>true</code>.</td>
+</tr>
+</tbody></table>
+<h4>Response Example (Success — 200 OK)</h4>
+<pre><code class="language-json">{
+  &quot;answer&quot;: &quot;The recommended freezer compartment temperature setting is **0°F (-18°C)**. For the fresh food compartment, set the control to **37°F (3°C)**. Allow 24 hours for temperatures to stabilize after adjustment.&quot;,
+  &quot;sources&quot;: [
+    &quot;GE_Profile_Refrigerator.pdf&quot;
+  ],
+  &quot;needs_clarification&quot;: false,
+  &quot;clarification_question&quot;: null
+}
+</code></pre>
+<h4>Response Example (Clarification Required — 200 OK)</h4>
+<pre><code class="language-json">{
+  &quot;answer&quot;: &quot;I found some information for B300, but you asked about A200. Should I proceed with the details for B300?&quot;,
+  &quot;sources&quot;: [],
+  &quot;needs_clarification&quot;: true,
+  &quot;clarification_question&quot;: &quot;I found some information for B300, but you asked about A200. Should I proceed with the details for B300?&quot;
+}
+</code></pre>
+<h4>Error Responses</h4>
+<ul>
+<li><code>400 Bad Request</code>:<ul>
+<li><code>{&quot;detail&quot;: &quot;Potential prompt injection detected.&quot;}</code></li>
+<li><code>{&quot;detail&quot;: &quot;I am specialized strictly in refrigerator and cooling appliance technical support. Please ask a query related to your refrigerator manual.&quot;}</code></li>
+</ul>
+</li>
+<li><code>429 Too Many Requests</code>: Rate limit exceeded (<code>20/minute</code>).</li>
+<li><code>503 Service Unavailable</code>: LLM provider unreachable and no fallback configured.</li>
+</ul>
+<hr>
+<h3>POST /chat/stream</h3>
+<p>Low Time-to-First-Token (TTFT) streaming endpoint utilizing Server-Sent Events (SSE) to deliver generated responses word-by-word.</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>POST</code></li>
+<li><strong>Path</strong>: <code>/chat/stream</code></li>
+<li><strong>Rate Limit</strong>: <code>30/minute</code></li>
+<li><strong>Headers</strong>:<ul>
+<li><code>Content-Type: application/json</code></li>
+<li><code>Accept: text/event-stream</code></li>
+</ul>
+</li>
+<li><strong>Request Body</strong>: <code>ChatRequest</code> (identical to <code>POST /chat</code>).</li>
+</ul>
+<h4>Stream Event Structure</h4>
+<p>Chunks are emitted formatted as SSE <code>data:</code> payloads separated by double newlines:</p>
+<pre><code class="language-text">data: The
+data:  recommended
+data:  freezer
+data:  temperature
+data:  is
+data:  **0°F**.
+data: [DONE]
+</code></pre>
+<ul>
+<li>When generation terminates, the sentinel token <code>data: [DONE]\n\n</code> is transmitted.</li>
+<li>If retrieval confidence is <code>LOW</code>, a single fallback chunk is emitted followed by stream termination.</li>
+</ul>
+<hr>
+<h2>6. Document Ingestion &amp; File Management</h2>
+<h3>POST /upload</h3>
+<p>Ingests, converts, chunks, embeds, and indexes a technical document into both text and vision vector collections.</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>POST</code></li>
+<li><strong>Path</strong>: <code>/upload</code></li>
+<li><strong>Rate Limit</strong>: <code>60/minute</code></li>
+<li><strong>Content-Type</strong>: <code>multipart/form-data</code></li>
+</ul>
+<h4>Multipart Form Fields</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Field Name</th>
+<th align="left">Type</th>
+<th align="left">Required</th>
+<th align="left">Constraints</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>file</code></td>
+<td align="left"><code>UploadFile</code></td>
+<td align="left"><strong>Yes</strong></td>
+<td align="left">Max 25MB (26,214,400 bytes)</td>
+<td align="left">Technical manual binary file.</td>
+</tr>
+</tbody></table>
+<h4>Allowed File Extensions &amp; MIME Types</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Extension</th>
+<th align="left">Allowed MIME Types</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>.pdf</code></td>
+<td align="left"><code>application/pdf</code></td>
+</tr>
+<tr>
+<td align="left"><code>.docx</code></td>
+<td align="left"><code>application/vnd.openxmlformats-officedocument.wordprocessingml.document</code></td>
+</tr>
+<tr>
+<td align="left"><code>.ppt</code></td>
+<td align="left"><code>application/vnd.ms-powerpoint</code></td>
+</tr>
+<tr>
+<td align="left"><code>.pptx</code></td>
+<td align="left"><code>application/vnd.openxmlformats-officedocument.presentationml.presentation</code></td>
+</tr>
+<tr>
+<td align="left"><code>.xls</code></td>
+<td align="left"><code>application/vnd.ms-excel</code></td>
+</tr>
+<tr>
+<td align="left"><code>.xlsx</code></td>
+<td align="left"><code>application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</code></td>
+</tr>
+<tr>
+<td align="left"><code>.txt</code></td>
+<td align="left"><code>text/plain</code></td>
+</tr>
+</tbody></table>
+<h4>Ingestion Pipeline Workflow</h4>
+<ol>
+<li>Validates file size $\le 25\text{MB}$ and format whitelist.</li>
+<li>Computes MD5 checksum; verifies against SQLite <code>registry.db</code> to prevent duplicate processing of identical files.</li>
+<li>Microsoft <strong>MarkItDown</strong> standardizes formatting into Markdown text.</li>
+<li><strong>PyMuPDF</strong> extracts raster schematics and renders vector CAD drawings.</li>
+<li>Perceptual hashing (<code>pHash</code>) and aspect ratio filters drop repetitive logos and decorative rules.</li>
+<li><strong>SentenceTransformers</strong> (<code>all-MiniLM-L6-v2</code>) writes 384-dimensional text vectors to Qdrant collection <code>manuals</code>.</li>
+<li><strong>SigLIP 2</strong> (<code>google/siglip-base-patch16-224</code>) writes 768-dimensional vision embeddings to Qdrant collection <code>manual_images</code>.</li>
+</ol>
+<h4>Response Example (<code>UploadResponse</code> — 200 OK)</h4>
+<pre><code class="language-json">{
+  &quot;filename&quot;: &quot;Whirlpool_WRF535_Manual.pdf&quot;,
+  &quot;markdown_file&quot;: &quot;Whirlpool_WRF535_Manual.md&quot;,
+  &quot;chunks_ingested&quot;: 42,
+  &quot;status&quot;: &quot;processed&quot;
+}
+</code></pre>
+<h4>Error Responses</h4>
+<ul>
+<li><code>400 Bad Request</code>: <code>{&quot;detail&quot;: &quot;No file selected&quot;}</code> or <code>{&quot;detail&quot;: &quot;Unsupported format. Supported: .docx, .pdf, .ppt, .pptx, .txt, .xls, .xlsx&quot;}</code></li>
+<li><code>413 Request Entity Too Large</code>: <code>{&quot;detail&quot;: &quot;File is too large. Max size allowed is 25MB.&quot;}</code></li>
+<li><code>500 Internal Server Error</code>: Parsing or embedding pipeline failure.</li>
+</ul>
+<hr>
+<h3>GET /files</h3>
+<p>Returns an alphabetical list of all unique manuals indexed in Qdrant or present on disk in <code>data_sandbox/input_manuals</code>.</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>GET</code></li>
+<li><strong>Path</strong>: <code>/files</code></li>
+<li><strong>Response Example (200 OK)</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;files&quot;: [
+    &quot;GE_Profile_Fridge.pdf&quot;,
+    &quot;Samsung_FrenchDoor_ServiceManual.pdf&quot;,
+    &quot;Whirlpool_WRF535_Manual.pdf&quot;
+  ]
+}
+</code></pre>
+<hr>
+<h3>DELETE /files/{filename}</h3>
+<p>Performs an atomic, complete purge of a specific manual across all application layers:</p>
+<ol>
+<li>Deletes raw file from <code>data_sandbox/input_manuals/</code>.</li>
+<li>Deletes converted markdown from <code>data_sandbox/processed_markdown/</code>.</li>
+<li>Deletes extracted figures from <code>data_sandbox/processed_markdown/images/{base_name}</code>.</li>
+<li>Deletes text vector points from Qdrant collection <code>manuals</code>.</li>
+<li>Deletes visual schematic points from Qdrant collection <code>manual_images</code>.</li>
+<li>Removes registration hash from SQLite <code>registry.db</code>.</li>
+<li>Clears in-memory LRU retrieval cache.</li>
+</ol>
+<ul>
+<li><strong>HTTP Method</strong>: <code>DELETE</code></li>
+<li><strong>Path</strong>: <code>/files/{filename}</code></li>
+<li><strong>Path Parameter</strong>: <code>filename</code> (<code>string</code>, required) — The name of the file to remove (e.g. <code>test1.pdf</code>).</li>
+<li><strong>Response Example (200 OK)</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;status&quot;: &quot;deleted&quot;,
+  &quot;filename&quot;: &quot;test1.pdf&quot;
+}
+</code></pre>
+<hr>
+<h3>POST /admin/reset</h3>
+<p>Administrative hard reset. Completely purges all input manuals, processed markdown documents, extracted images, Qdrant vectors across both collections, and SQLite registry records.</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>POST</code></li>
+<li><strong>Path</strong>: <code>/admin/reset</code></li>
+<li><strong>Response Example (200 OK)</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;message&quot;: &quot;All manuals and index data successfully wiped.&quot;
+}
+</code></pre>
+<hr>
+<h3>GET /products</h3>
+<p>Returns a list of all distinct product model identifiers extracted from manual payloads in Qdrant.</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>GET</code></li>
+<li><strong>Path</strong>: <code>/products</code></li>
+<li><strong>Response Example (200 OK)</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;products&quot;: [
+    &quot;A200&quot;,
+    &quot;GE Profile&quot;,
+    &quot;WRF535&quot;,
+    &quot;X100&quot;
+  ]
+}
+</code></pre>
+<hr>
+<h3>GET /debug_qdrant</h3>
+<p>Internal diagnostic endpoint inspecting vector payload density and distribution across documents.</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>GET</code></li>
+<li><strong>Path</strong>: <code>/debug_qdrant</code></li>
+<li><strong>Response Example (200 OK)</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;total&quot;: 145,
+  &quot;sources_count&quot;: {
+    &quot;GE_Profile_Fridge.pdf&quot;: 82,
+    &quot;Whirlpool_WRF535_Manual.pdf&quot;: 63
+  }
+}
+</code></pre>
+<hr>
+<h2>7. Agent Execution API</h2>
+<h3>POST /agent/run</h3>
+<p>Executes the unified <strong>LangGraph <code>StateGraph</code></strong> agentic workflow (<code>agent_flow.py</code>). Designed for autonomous diagnostic workflows, technical scraping, and multimodal response generation with grounded visual diagrams.</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>POST</code></li>
+<li><strong>Path</strong>: <code>/agent/run</code></li>
+<li><strong>Rate Limit</strong>: <code>10/minute</code></li>
+<li><strong>Headers</strong>:<ul>
+<li><code>Content-Type: application/json</code></li>
+</ul>
+</li>
+</ul>
+<h4>Request Parameters (<code>AgentRequest</code>)</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Field</th>
+<th align="left">Type</th>
+<th align="left">Required</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>query</code></td>
+<td align="left"><code>string</code></td>
+<td align="left"><strong>Yes</strong></td>
+<td align="left">Technical query or symptom description.</td>
+</tr>
+<tr>
+<td align="left"><code>source_input</code></td>
+<td align="left"><code>string</code></td>
+<td align="left">No</td>
+<td align="left">Optional URL to scrape or local filename to bind.</td>
+</tr>
+<tr>
+<td align="left"><code>session_id</code></td>
+<td align="left"><code>string</code></td>
+<td align="left">No</td>
+<td align="left">Session identifier (auto-generates UUID if omitted).</td>
+</tr>
+</tbody></table>
+<h4>Request Example</h4>
+<pre><code class="language-json">{
+  &quot;query&quot;: &quot;How do I test the defrost heater on model GE Profile?&quot;,
+  &quot;source_input&quot;: &quot;GE_Profile_Fridge.pdf&quot;,
+  &quot;session_id&quot;: &quot;sess-field-tech-42&quot;
+}
+</code></pre>
+<h4>Response Fields (<code>AgentResponse</code>)</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Field</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>answer</code></td>
+<td align="left"><code>string</code></td>
+<td align="left">Synthesized technical explanation with bolded values and procedure.</td>
+</tr>
+<tr>
+<td align="left"><code>steps</code></td>
+<td align="left"><code>list[string]</code></td>
+<td align="left">Ordered sequential maintenance or diagnostic steps.</td>
+</tr>
+<tr>
+<td align="left"><code>sources</code></td>
+<td align="left"><code>list[object]</code></td>
+<td align="left">Chunk metadata objects detailing source file, page number, and score.</td>
+</tr>
+<tr>
+<td align="left"><code>product_id</code></td>
+<td align="left"><code>string</code> or <code>null</code></td>
+<td align="left">Extracted product or model identification string.</td>
+</tr>
+<tr>
+<td align="left"><code>clarification_needed</code></td>
+<td align="left"><code>boolean</code></td>
+<td align="left">Indicates whether query was underspecified.</td>
+</tr>
+<tr>
+<td align="left"><code>clarification_question</code></td>
+<td align="left"><code>string</code> or <code>null</code></td>
+<td align="left">Clarification text prompt if needed.</td>
+</tr>
+<tr>
+<td align="left"><code>status</code></td>
+<td align="left"><code>string</code> or <code>null</code></td>
+<td align="left">Lifecycle outcome (<code>qa</code>, <code>troubleshoot</code>, etc.).</td>
+</tr>
+<tr>
+<td align="left"><code>version_info</code></td>
+<td align="left"><code>string</code> or <code>null</code></td>
+<td align="left">Document version hash details if source was ingested.</td>
+</tr>
+<tr>
+<td align="left"><code>images</code></td>
+<td align="left"><code>list[object]</code></td>
+<td align="left">Associated visual diagram cards matching query context.</td>
+</tr>
+</tbody></table>
+<h4>Response Example (200 OK)</h4>
+<pre><code class="language-json">{
+  &quot;answer&quot;: &quot;To test the defrost heater on the **GE Profile**, disconnect power, locate the heater at the bottom of the evaporator coil, and measure resistance across the terminal pins using a multimeter set to the lowest ohms range. A functional 120V heater should read between **20 to 35 Ohms**. An infinite reading indicates an open circuit.&quot;,
+  &quot;steps&quot;: [
+    &quot;Unplug refrigerator from electrical outlet&quot;,
+    &quot;Remove freezer rear evaporator cover panel&quot;,
+    &quot;Disconnect wiring harness from both heater terminals&quot;,
+    &quot;Measure resistance across terminals using multimeter&quot;
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;source&quot;: &quot;GE_Profile_Fridge.pdf&quot;,
+      &quot;page&quot;: 14,
+      &quot;rrf_score&quot;: 0.0322
+    }
+  ],
+  &quot;product_id&quot;: &quot;GE Profile&quot;,
+  &quot;clarification_needed&quot;: false,
+  &quot;clarification_question&quot;: null,
+  &quot;status&quot;: &quot;qa&quot;,
+  &quot;version_info&quot;: null,
+  &quot;images&quot;: [
+    {
+      &quot;image_id&quot;: &quot;ge_profile_p14_df0291&quot;,
+      &quot;document_id&quot;: &quot;GE_Profile_Fridge&quot;,
+      &quot;page&quot;: 14,
+      &quot;caption&quot;: &quot;Defrost Heater Assembly &amp; Terminal Pins&quot;,
+      &quot;image_url&quot;: &quot;/document-images/GE_Profile_Fridge/ge_profile_p14_df0291&quot;
+    }
+  ]
+}
+</code></pre>
+<hr>
+<h2>8. Troubleshooting &amp; Session Management</h2>
+<h3>POST /troubleshoot</h3>
+<p>Multi-turn, state-guided diagnostic endpoint implementing a bounded Standard Operating Procedure (SOP) state machine.</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>POST</code></li>
+<li><strong>Path</strong>: <code>/troubleshoot</code></li>
+<li><strong>Rate Limit</strong>: <code>20/minute</code></li>
+<li><strong>Headers</strong>:<ul>
+<li><code>Content-Type: application/json</code></li>
+</ul>
+</li>
+</ul>
+<h4>Request Parameters (<code>TroubleshootRequest</code>)</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Field</th>
+<th align="left">Type</th>
+<th align="left">Required</th>
+<th align="left">Constraints</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>session_id</code></td>
+<td align="left"><code>string</code></td>
+<td align="left"><strong>Yes</strong></td>
+<td align="left">1 to 100 characters</td>
+<td align="left">Persistent session ID for tracking history across turns.</td>
+</tr>
+<tr>
+<td align="left"><code>message</code></td>
+<td align="left"><code>string</code></td>
+<td align="left"><strong>Yes</strong></td>
+<td align="left">1 to 4000 characters</td>
+<td align="left">Initial symptom, product answer, or <code>Yes</code>/<code>No</code> action feedback.</td>
+</tr>
+</tbody></table>
+<h4>State Machine Progression Flow</h4>
+<pre><code class="language-mermaid">stateDiagram-v2
+    [*] --&gt; START
+    START --&gt; IDENTIFY_PRODUCT: Model Missing
+    START --&gt; RETRIEVE_KNOWLEDGE: Model Detected
+    IDENTIFY_PRODUCT --&gt; RETRIEVE_KNOWLEDGE: Model Provided
+    RETRIEVE_KNOWLEDGE --&gt; DIAGNOSE
+    DIAGNOSE --&gt; QUESTION: More Info Needed
+    DIAGNOSE --&gt; ACTION: Repair Proposed
+    DIAGNOSE --&gt; ESCALATE: Out of Scope / Exhausted
+    QUESTION --&gt; DIAGNOSE: User Answers
+    ACTION --&gt; VERIFY: System Requests Check
+    VERIFY --&gt; RESOLVED: User Confirms Fix (Yes)
+    VERIFY --&gt; DIAGNOSE: User Reports Unresolved (No)
+    RESOLVED --&gt; [*]
+    ESCALATE --&gt; [*]
+</code></pre>
+<h4>Response Structure</h4>
+<p>Responses return a JSON dictionary containing the new <code>status</code> and contextual payload:</p>
+<pre><code class="language-json">{
+  &quot;status&quot;: &quot;action&quot;,
+  &quot;action&quot;: &quot;Inspect the condenser fan motor located next to the compressor. Remove any lint or obstruction blocking the blades and confirm the fan spins freely by hand.&quot;,
+  &quot;session&quot;: {
+    &quot;session_id&quot;: &quot;tech-session-001&quot;,
+    &quot;product&quot;: &quot;Whirlpool WRF535&quot;,
+    &quot;issue&quot;: &quot;not cooling&quot;,
+    &quot;step&quot;: 2,
+    &quot;status&quot;: &quot;ACTION&quot;,
+    &quot;history&quot;: [
+      {
+        &quot;question&quot;: &quot;Is the compressor running and warm to the touch?&quot;,
+        &quot;answer&quot;: &quot;Yes, compressor is running but coils are room temperature.&quot;
+      }
+    ]
+  }
+}
+</code></pre>
+<p>Possible response <code>status</code> values:</p>
+<ul>
+<li><code>&quot;question&quot;</code>: Additional symptom details or measurements required. Field: <code>question</code>.</li>
+<li><code>&quot;action&quot;</code>: Specific physical check, multimeter test, or part replacement proposed. Field: <code>action</code>.</li>
+<li><code>&quot;verify&quot;</code>: System verifies if the proposed action fixed the problem. Field: <code>question</code> (e.g. <em>&quot;Did this action resolve the issue? Please reply Yes or No.&quot;</em>).</li>
+<li><code>&quot;resolved&quot;</code>: Issue confirmed fixed. Field: <code>message</code>.</li>
+<li><code>&quot;escalate&quot;</code>: Procedures exhausted or dangerous condition. Recommends Tier-3 field engineer escalation. Field: <code>message</code>.</li>
+</ul>
+<hr>
+<h3>GET /sessions</h3>
+<p>Lists chat conversations for a given user, ordered by most recently updated.</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>GET</code></li>
+<li><strong>Path</strong>: <code>/sessions</code></li>
+<li><strong>Query Parameter</strong>: <code>user_id</code> (<code>string</code>, optional, default: <code>&quot;default_user&quot;</code>)</li>
+<li><strong>Response Example (200 OK)</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;sessions&quot;: [
+    {
+      &quot;session_id&quot;: &quot;tech-session-001&quot;,
+      &quot;user_id&quot;: &quot;default_user&quot;,
+      &quot;title&quot;: &quot;Defrost Heater Testing&quot;,
+      &quot;created_at&quot;: 1727254800.0,
+      &quot;updated_at&quot;: 1727255100.0,
+      &quot;message_count&quot;: 6,
+      &quot;last_message&quot;: &quot;Defrost heater reading 28 ohms.&quot;,
+      &quot;product&quot;: &quot;GE Profile&quot;,
+      &quot;status&quot;: &quot;RESOLVED&quot;
+    }
+  ]
+}
+</code></pre>
+<hr>
+<h3>POST /sessions</h3>
+<p>Creates or updates conversation history and state in the session store.</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>POST</code></li>
+<li><strong>Path</strong>: <code>/sessions</code></li>
+<li><strong>Headers</strong>: <code>Content-Type: application/json</code></li>
+</ul>
+<h4>Request Parameters (<code>SessionPayload</code>)</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Field</th>
+<th align="left">Type</th>
+<th align="left">Required</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>session_id</code></td>
+<td align="left"><code>string</code></td>
+<td align="left"><strong>Yes</strong></td>
+<td align="left">Target session identifier.</td>
+</tr>
+<tr>
+<td align="left"><code>user_id</code></td>
+<td align="left"><code>string</code></td>
+<td align="left">No</td>
+<td align="left">Defaults to <code>&quot;default_user&quot;</code>.</td>
+</tr>
+<tr>
+<td align="left"><code>title</code></td>
+<td align="left"><code>string</code></td>
+<td align="left">No</td>
+<td align="left">Human-readable title for sidebar display.</td>
+</tr>
+<tr>
+<td align="left"><code>messages</code></td>
+<td align="left"><code>list[object]</code></td>
+<td align="left">No</td>
+<td align="left">Full list of conversation turn messages.</td>
+</tr>
+<tr>
+<td align="left"><code>product</code></td>
+<td align="left"><code>string</code></td>
+<td align="left">No</td>
+<td align="left">Active product model tag.</td>
+</tr>
+<tr>
+<td align="left"><code>status</code></td>
+<td align="left"><code>string</code></td>
+<td align="left">No</td>
+<td align="left">Current session state string.</td>
+</tr>
+</tbody></table>
+<h4>Response Example (200 OK)</h4>
+<pre><code class="language-json">{
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;session_id&quot;: &quot;tech-session-001&quot;
+}
+</code></pre>
+<hr>
+<h3>GET /sessions/{session_id}</h3>
+<p>Retrieves full conversation turns, state variables, and history for a specific session.</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>GET</code></li>
+<li><strong>Path</strong>: <code>/sessions/{session_id}</code></li>
+<li><strong>Path Parameter</strong>: <code>session_id</code> (<code>string</code>, required)</li>
+<li><strong>Response</strong>: Returns session dictionary or <code>404 Not Found</code> if missing.</li>
+</ul>
+<hr>
+<h3>DELETE /sessions/{session_id}</h3>
+<p>Deletes a conversation session from the registry.</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>DELETE</code></li>
+<li><strong>Path</strong>: <code>/sessions/{session_id}</code></li>
+<li><strong>Response Example (200 OK)</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;status&quot;: &quot;deleted&quot;,
+  &quot;session_id&quot;: &quot;tech-session-001&quot;
+}
+</code></pre>
+<hr>
+<h2>9. Voice &amp; Speech APIs</h2>
+<h3>POST /transcribe</h3>
+<p>Transcribes uploaded audio into text using hybrid speech-to-text engines:</p>
+<ul>
+<li><p>English audio routes to local <code>faster-whisper</code> (<code>small</code> model, <code>int8</code> CPU).</p>
+</li>
+<li><p>Indian regional language audio routes to <strong>Sarvam AI (<code>Saaras v3</code>) API</strong>.</p>
+</li>
+<li><p><strong>HTTP Method</strong>: <code>POST</code></p>
+</li>
+<li><p><strong>Path</strong>: <code>/transcribe</code></p>
+</li>
+<li><p><strong>Rate Limit</strong>: <code>60/minute</code></p>
+</li>
+<li><p><strong>Content-Type</strong>: <code>multipart/form-data</code></p>
+</li>
+</ul>
+<h4>Form Parameters</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Field</th>
+<th align="left">Type</th>
+<th align="left">Required</th>
+<th align="left">Default</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>audio</code></td>
+<td align="left"><code>UploadFile</code></td>
+<td align="left"><strong>Yes</strong></td>
+<td align="left">—</td>
+<td align="left">Binary audio recording (WAV, WEBM, MP3, OGG, M4A).</td>
+</tr>
+<tr>
+<td align="left"><code>hint_lang</code></td>
+<td align="left"><code>string</code></td>
+<td align="left">No</td>
+<td align="left"><code>&quot;auto&quot;</code></td>
+<td align="left">Language code hint (<code>en</code>, <code>hi</code>, <code>ta</code>, <code>te</code>, <code>kn</code>, <code>ml</code>, <code>bn</code>, <code>mr</code>, <code>auto</code>).</td>
+</tr>
+</tbody></table>
+<h4>Response Example (200 OK)</h4>
+<pre><code class="language-json">{
+  &quot;text&quot;: &quot;The freezer evaporator fan is making a loud buzzing noise.&quot;,
+  &quot;detected_language&quot;: &quot;en&quot;
+}
+</code></pre>
+<hr>
+<h3>POST /speak</h3>
+<p>Synthesizes textual diagnostic steps into natural spoken audio.</p>
+<ul>
+<li><p>Automatically cleans markdown headers, asterisks, bullet points, and source citations before speaking.</p>
+</li>
+<li><p>Routes Indian languages to <strong>Sarvam AI (<code>Bulbul v3</code>)</strong> (<code>audio/wav</code>).</p>
+</li>
+<li><p>Routes English and other languages to <strong>Microsoft <code>edge-tts</code></strong> neural voices (<code>audio/mpeg</code>).</p>
+</li>
+<li><p><strong>HTTP Method</strong>: <code>POST</code></p>
+</li>
+<li><p><strong>Path</strong>: <code>/speak</code></p>
+</li>
+<li><p><strong>Rate Limit</strong>: <code>20/minute</code></p>
+</li>
+<li><p><strong>Headers</strong>:</p>
+<ul>
+<li><code>Content-Type: application/json</code></li>
+</ul>
+</li>
+</ul>
+<h4>Request Parameters (<code>SpeakRequest</code>)</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Field</th>
+<th align="left">Type</th>
+<th align="left">Required</th>
+<th align="left">Constraints</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>text</code></td>
+<td align="left"><code>string</code></td>
+<td align="left"><strong>Yes</strong></td>
+<td align="left">1 to 4000 characters</td>
+<td align="left">Text to synthesize into speech.</td>
+</tr>
+<tr>
+<td align="left"><code>language</code></td>
+<td align="left"><code>string</code></td>
+<td align="left">No</td>
+<td align="left">Default: <code>&quot;auto&quot;</code></td>
+<td align="left">Language code (<code>en</code>, <code>hi</code>, <code>ta</code>, <code>te</code>, <code>kn</code>, etc.).</td>
+</tr>
+</tbody></table>
+<h4>Response</h4>
+<ul>
+<li><strong>Status Code</strong>: <code>200 OK</code></li>
+<li><strong>Content-Type</strong>: <code>audio/mpeg</code> (Edge-TTS) or <code>audio/wav</code> (Sarvam AI)</li>
+<li><strong>Body</strong>: Raw audio binary stream.</li>
+</ul>
+<hr>
+<h2>10. Document Image &amp; Media Asset API</h2>
+<h3>GET /document-images/{document_id}/{image_id}</h3>
+<p>Safely streams extracted schematic PNG/JPEG images for visual display in technician answer cards.</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>GET</code></li>
+<li><strong>Path</strong>: <code>/document-images/{document_id}/{image_id}</code></li>
+<li><strong>Rate Limit</strong>: <code>60/minute</code></li>
+</ul>
+<h4>Path Parameters</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Parameter</th>
+<th align="left">Type</th>
+<th align="left">Required</th>
+<th align="left">Constraints</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>document_id</code></td>
+<td align="left"><code>string</code></td>
+<td align="left"><strong>Yes</strong></td>
+<td align="left">Regex <code>^[a-zA-Z0-9_-]+$</code></td>
+</tr>
+<tr>
+<td align="left"><code>image_id</code></td>
+<td align="left"><code>string</code></td>
+<td align="left"><strong>Yes</strong></td>
+<td align="left">Regex <code>^[a-zA-Z0-9_-]+$</code></td>
+</tr>
+</tbody></table>
+<h4>Security Checks</h4>
+<ol>
+<li><strong>Strict Regex Sanitization</strong>: Characters outside <code>[a-zA-Z0-9_-]</code> immediately return <code>404 Not Found</code>.</li>
+<li><strong>Path Traversal Guards</strong>: Validates that resolved target paths strictly reside within the canonical <code>data_sandbox/processed_markdown/images/</code> directory.</li>
+<li><strong>Metadata Verification</strong>: Ensures the image record exists in the document&#39;s <code>metadata.json</code> before serving.</li>
+</ol>
+<ul>
+<li><strong>Response</strong>: <code>FileResponse</code> streaming the image file with appropriate media type (<code>image/png</code>, <code>image/jpeg</code>).</li>
+</ul>
+<hr>
+<h2>11. System Telemetry &amp; Health Checks</h2>
+<h3>GET /health</h3>
+<p>Basic liveness and capacity endpoint.</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>GET</code></li>
+<li><strong>Path</strong>: <code>/health</code></li>
+<li><strong>Response Fields (<code>HealthResponse</code>)</strong>:<ul>
+<li><code>status</code>: Always <code>&quot;ok&quot;</code>.</li>
+<li><code>llm_provider</code>: Currently active LLM provider (<code>&quot;ollama&quot;</code>, <code>&quot;groq&quot;</code>, or <code>&quot;sambanova&quot;</code>).</li>
+<li><code>vectors_stored</code>: Total number of chunk vector points in Qdrant <code>manuals</code>.</li>
+</ul>
+</li>
+</ul>
+<h4>Response Example (200 OK)</h4>
+<pre><code class="language-json">{
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;llm_provider&quot;: &quot;groq&quot;,
+  &quot;vectors_stored&quot;: 560
+}
+</code></pre>
+<hr>
+<h3>GET /health/llm</h3>
+<p>Deep telemetry endpoint providing status on local Ollama connectivity, task model mappings, and cloud fallback metrics.</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>GET</code></li>
+<li><strong>Path</strong>: <code>/health/llm</code></li>
+<li><strong>Response Example (200 OK)</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;primary_provider&quot;: &quot;ollama&quot;,
+  &quot;ollama_enabled&quot;: false,
+  &quot;ollama_base_url&quot;: &quot;http://127.0.0.1:11434&quot;,
+  &quot;ollama_reachable&quot;: true,
+  &quot;cloud_fallback_provider&quot;: &quot;groq&quot;,
+  &quot;cloud_fallback_model&quot;: &quot;qwen/qwen3.8-27b&quot;,
+  &quot;last_provider_used&quot;: &quot;groq&quot;,
+  &quot;last_model_used&quot;: &quot;qwen/qwen3.8-27b&quot;,
+  &quot;last_task&quot;: &quot;chat&quot;,
+  &quot;last_error&quot;: null,
+  &quot;last_fallback_reason&quot;: &quot;Ollama disabled by configuration&quot;,
+  &quot;task_models&quot;: {
+    &quot;classification&quot;: &quot;qwen2.5:3b&quot;,
+    &quot;chat&quot;: &quot;gemma3:4b&quot;,
+    &quot;workflow&quot;: &quot;llama3.2:3b&quot;,
+    &quot;caption&quot;: &quot;gemma3:4b&quot;
+  },
+  &quot;stats&quot;: {
+    &quot;total_requests&quot;: 14,
+    &quot;ollama_served&quot;: 0,
+    &quot;cloud_fallback_served&quot;: 14
+  }
+}
+</code></pre>
+<hr>
+<h2>12. Model Context Protocol (MCP) Integration</h2>
+<h3>Architecture &amp; Protocol Mount</h3>
+<p>OCTO-RAG implements a native <strong>FastMCP</strong> server (<code>backend/app/mcp/fridge_mcp_server.py</code>) conforming to Anthropic&#39;s open Model Context Protocol specification. The MCP server is mounted directly into FastAPI:</p>
+<pre><code class="language-python">app.mount(&quot;/mcp&quot;, fridge_mcp_server.sse_app())
+</code></pre>
+<ul>
+<li><strong>Transport 1: Server-Sent Events (SSE)</strong>: Exposed at <code>GET http://localhost:8000/mcp/sse</code>.</li>
+<li><strong>Transport 2: Standard I/O (stdio)</strong>: Can be spawned directly by desktop clients via <code>python backend/app/mcp/fridge_mcp_server.py</code>.</li>
+</ul>
+<h4>Claude Desktop Configuration (<code>claude_desktop_config.json</code>)</h4>
+<pre><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;octo-rag&quot;: {
+      &quot;command&quot;: &quot;C:\\Users\\SAMSUNG\\AppData\\Local\\Programs\\Python\\Python311\\python.exe&quot;,
+      &quot;args&quot;: [
+        &quot;C:\\Users\\SAMSUNG\\OneDrive\\Desktop\\rag-multimodal-assistant\\backend\\app\\mcp\\fridge_mcp_server.py&quot;
+      ]
+    }
+  }
+}
+</code></pre>
+<hr>
+<h3>Tool 1: search_fridge_manuals</h3>
+<p>Performs grounded hybrid retrieval across indexed refrigerator manuals in Qdrant.</p>
+<ul>
+<li><strong>Parameters</strong>:<ul>
+<li><code>query</code> (<code>string</code>, required): Search prompt or question.</li>
+<li><code>source_file</code> (<code>string</code>, optional, default <code>&quot;&quot;</code>): Filter by specific manual filename.</li>
+</ul>
+</li>
+<li><strong>Output</strong>: Formatted string with confidence rating and chunk citations (<code>--- Chunk 1 [Source: ... | Page: ...] ---</code>).</li>
+<li><strong>Example Call</strong>:<pre><code class="language-json">{&quot;query&quot;: &quot;defrost drain tube cleaning&quot;, &quot;source_file&quot;: &quot;&quot;}
+</code></pre>
+</li>
+</ul>
+<hr>
+<h3>Tool 2: lookup_error_code</h3>
+<p>Resolves refrigerator control panel error codes to PCB pinouts, multimeter procedures, and repair instructions.</p>
+<ul>
+<li><strong>Parameters</strong>:<ul>
+<li><code>brand</code> (<code>string</code>, required): Manufacturer (e.g. <code>GE</code>, <code>Samsung</code>, <code>LG</code>, <code>Whirlpool</code>).</li>
+<li><code>model</code> (<code>string</code>, required): Appliance model series (e.g. <code>Profile</code>, <code>French Door</code>).</li>
+<li><code>code</code> (<code>string</code>, required): Displayed code (e.g. <code>Er FF</code>, <code>SY EF</code>, <code>22 E</code>, <code>E5</code>, <code>88 88</code>).</li>
+</ul>
+</li>
+<li><strong>Output (<code>dict</code>)</strong>:<ul>
+<li><code>component</code>: Failing assembly.</li>
+<li><code>description</code>: Technical explanation of fault trigger.</li>
+<li><code>test_procedure</code>: Multimeter test points and expected voltages.</li>
+<li><code>recommended_action</code>: Repair or part replacement SOP.</li>
+<li><code>status</code>: <code>&quot;FOUND&quot;</code> or <code>&quot;GENERIC_FALLBACK&quot;</code>.</li>
+</ul>
+</li>
+</ul>
+<h4>Output Example</h4>
+<pre><code class="language-json">{
+  &quot;brand&quot;: &quot;GE&quot;,
+  &quot;model&quot;: &quot;Profile&quot;,
+  &quot;code&quot;: &quot;ER FF&quot;,
+  &quot;status&quot;: &quot;FOUND&quot;,
+  &quot;component&quot;: &quot;Evaporator Fan Motor&quot;,
+  &quot;description&quot;: &quot;Freezer Evaporator Fan Motor failure or ice blockage detected.&quot;,
+  &quot;test_procedure&quot;: &quot;Measure voltage between Fan Signal Pin &amp; GND on PCB (Expected: 12V DC). Check fan blade rotation for ice buildup.&quot;,
+  &quot;recommended_action&quot;: &quot;Thaw ice blockage, test fan motor resistance (approx 1.5 - 3.0 kOhm across coil), replace motor if open loop.&quot;
+}
+</code></pre>
+<hr>
+<h3>Tool 3: get_thermistor_ohm_table</h3>
+<p>Calculates expected NTC thermistor resistance using the Steinhart-Hart equation ($R_0=10\text{k}\Omega$, $T_0=298.15\text{K}$, $\beta=3950\text{K}$) for multimeter diagnosis.</p>
+<ul>
+<li><strong>Parameters</strong>:<ul>
+<li><code>temp_celsius</code> (<code>float</code>, required): Test temperature in °C (e.g., <code>-20.0</code> for freezer, <code>0.0</code> for ice bath test, <code>25.0</code> for room temp).</li>
+</ul>
+</li>
+<li><strong>Output (<code>dict</code>)</strong>:<ul>
+<li><code>temperature_celsius</code>: Celsius temperature tested.</li>
+<li><code>temperature_fahrenheit</code>: Converted Fahrenheit temperature.</li>
+<li><code>expected_resistance_kohm</code>: Expected resistance in kilo-Ohms ($k\Omega$).</li>
+<li><code>multimeter_setting</code>: Recommended meter scale setting.</li>
+<li><code>testing_instruction</code>: Practical probe instructions and failure criteria.</li>
+</ul>
+</li>
+</ul>
+<h4>Output Example</h4>
+<pre><code class="language-json">{
+  &quot;temperature_celsius&quot;: 0.0,
+  &quot;temperature_fahrenheit&quot;: 32.0,
+  &quot;expected_resistance_kohm&quot;: 32.65,
+  &quot;multimeter_setting&quot;: &quot;200kOhm Resistance (Ohms)&quot;,
+  &quot;testing_instruction&quot;: &quot;Place multimeter probes on thermistor leads. At 0.0°C (32.0°F), meter should read approx 32.65 kOhm. Reading 0 Ohm indicates short circuit; infinite reading indicates open wire.&quot;,
+  &quot;status&quot;: &quot;OK&quot;
+}
+</code></pre>
+<hr>
+<h3>Tool 4: lookup_part_number</h3>
+<p>Resolves OEM replacement part numbers, electrical ratings, and repair difficulty levels.</p>
+<ul>
+<li><strong>Parameters</strong>:<ul>
+<li><code>model</code> (<code>string</code>, required): Appliance model (e.g. <code>&#39;GE Profile&#39;</code>).</li>
+<li><code>component_name</code> (<code>string</code>, required): Description (e.g. <code>&#39;defrost heater&#39;</code>, <code>&#39;start relay&#39;</code>, <code>&#39;water valve&#39;</code>, <code>&#39;fan&#39;</code>, <code>&#39;control board&#39;</code>).</li>
+</ul>
+</li>
+<li><strong>Output (<code>dict</code>)</strong>:<ul>
+<li><code>oem_part_number</code>: Manufacturer OEM part number.</li>
+<li><code>official_name</code>: Full component catalog title.</li>
+<li><code>electrical_specs</code>: Operating voltage and wattage specifications.</li>
+<li><code>repair_difficulty</code>: Difficulty rating (<code>Easy</code>, <code>Moderate</code>, <code>Complex</code>).</li>
+<li><code>status</code>: <code>&quot;MATCH_FOUND&quot;</code> or <code>&quot;GENERIC_LOOKUP&quot;</code>.</li>
+</ul>
+</li>
+</ul>
+<h4>Output Example</h4>
+<pre><code class="language-json">{
+  &quot;searched_model&quot;: &quot;GE Profile&quot;,
+  &quot;searched_component&quot;: &quot;defrost heater&quot;,
+  &quot;oem_part_number&quot;: &quot;WR51X10055&quot;,
+  &quot;official_name&quot;: &quot;Glass Tube Defrost Heater Assembly&quot;,
+  &quot;electrical_specs&quot;: &quot;120V AC, 525W&quot;,
+  &quot;repair_difficulty&quot;: &quot;Moderate&quot;,
+  &quot;status&quot;: &quot;MATCH_FOUND&quot;
+}
+</code></pre>
+<hr>
+<h3>Tool 5: run_octo_agent</h3>
+<p>Executes the complete LangGraph agent flow from within Claude Desktop or MCP clients.</p>
+<ul>
+<li><strong>Parameters</strong>:<ul>
+<li><code>query</code> (<code>string</code>, required): Technical query.</li>
+<li><code>source_input</code> (<code>string</code>, optional, default <code>&quot;&quot;</code>): Optional manual or URL.</li>
+<li><code>session_id</code> (<code>string</code>, optional, default <code>&quot;&quot;</code>): Session identifier.</li>
+</ul>
+</li>
+<li><strong>Output (<code>dict</code>)</strong>: Full <code>AgentResponse</code> dictionary including <code>answer</code>, <code>steps</code>, <code>sources</code>, <code>product_id</code>, and <code>images</code>.</li>
+</ul>
+<hr>
+<h3>Tool 6: troubleshoot_appliance_turn</h3>
+<p>Executes an interactive turn of the stateful troubleshooting engine.</p>
+<ul>
+<li><strong>Parameters</strong>:<ul>
+<li><code>session_id</code> (<code>string</code>, required): Persistent troubleshooting session ID.</li>
+<li><code>message</code> (<code>string</code>, required): User response or diagnostic test outcome.</li>
+</ul>
+</li>
+<li><strong>Output (<code>dict</code>)</strong>: Diagnostic state dictionary containing <code>status</code>, <code>question</code>/<code>action</code>, and updated session state.</li>
+</ul>
+<hr>
+<h2>13. Security, Domain Boundaries &amp; Rate Limiting</h2>
+<h3>Pre-LLM Security Architecture</h3>
+<pre><code class="language-mermaid">graph TD
+    Request[Inbound HTTP / MCP Request] --&gt; SizeCheck{File Size &lt;= 25MB?}
+    SizeCheck --&gt;|No| R413[HTTP 413 File Too Large]
+    SizeCheck --&gt;|Yes| MIMECheck{MIME / Ext Allowed?}
+    MIMECheck --&gt;|No| R400M[HTTP 400 Unsupported Format]
+    MIMECheck --&gt;|Yes| InjectionCheck{is_prompt_injection?}
+    InjectionCheck --&gt;|Match| R400I[HTTP 400 Prompt Injection]
+    InjectionCheck --&gt;|Clean| DomainCheck{is_out_of_domain?}
+    DomainCheck --&gt;|Match| R400D[HTTP 400 Out of Domain / 0 Tokens]
+    DomainCheck --&gt;|In-Domain| CorePipeline[RAG Retrieval &amp; LLM Generation]
+</code></pre>
+<h3>1. Prompt Injection Defenses (<code>is_prompt_injection</code>)</h3>
+<p>Matches patterns attempting system role override, secret leakage, or developer directive reset:</p>
+<ul>
+<li><code>ignore previous instructions</code>, <code>system prompt</code>, <code>developer message</code>, <code>reveal hidden prompt</code>, <code>override rules</code>, <code>bypass restrictions</code>.</li>
+<li>Triggers <code>HTTP 400 Bad Request</code>.</li>
+</ul>
+<h3>2. Domain Boundary Guardrails (<code>is_out_of_domain</code>)</h3>
+<p>Blocks off-topic queries before any vector database or LLM invocation:</p>
+<ul>
+<li><strong>In-Domain Whitelist</strong>: Refrigerator, freezer, cooler, chiller, ice maker, defrost, compressor, evaporator, condenser, thermostat, door seal, refrigerant, cooling, temperature.</li>
+<li><strong>Out-of-Domain Blacklist</strong>: Automotive, recipes/cooking, non-cooling appliances (washers, dryers, ovens, TVs), finance/crypto, politics, creative writing (poems, jokes, stories).</li>
+<li><strong>Benefit</strong>: <strong>0 LLM API tokens</strong> are consumed by off-topic queries.</li>
+</ul>
+<h3>3. Rate Limiting Rules (<code>slowapi</code>)</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Endpoint</th>
+<th align="left">Method</th>
+<th align="left">Rate Limit</th>
+<th align="left">Scope</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>/upload</code></td>
+<td align="left"><code>POST</code></td>
+<td align="left"><code>60 / minute</code></td>
+<td align="left">Ingestion CPU protection</td>
+</tr>
+<tr>
+<td align="left"><code>/agent/run</code></td>
+<td align="left"><code>POST</code></td>
+<td align="left"><code>10 / minute</code></td>
+<td align="left">Complex LangGraph orchestration</td>
+</tr>
+<tr>
+<td align="left"><code>/transcribe</code></td>
+<td align="left"><code>POST</code></td>
+<td align="left"><code>60 / minute</code></td>
+<td align="left">Audio STT queue protection</td>
+</tr>
+<tr>
+<td align="left"><code>/chat</code></td>
+<td align="left"><code>POST</code></td>
+<td align="left"><code>20 / minute</code></td>
+<td align="left">General query load protection</td>
+</tr>
+<tr>
+<td align="left"><code>/troubleshoot</code></td>
+<td align="left"><code>POST</code></td>
+<td align="left"><code>20 / minute</code></td>
+<td align="left">Diagnostic state turns</td>
+</tr>
+<tr>
+<td align="left"><code>/speak</code></td>
+<td align="left"><code>POST</code></td>
+<td align="left"><code>20 / minute</code></td>
+<td align="left">Neural TTS audio generation</td>
+</tr>
+<tr>
+<td align="left"><code>/chat/stream</code></td>
+<td align="left"><code>POST</code></td>
+<td align="left"><code>30 / minute</code></td>
+<td align="left">SSE streaming connection rate</td>
+</tr>
+<tr>
+<td align="left"><code>/document-images/...</code></td>
+<td align="left"><code>GET</code></td>
+<td align="left"><code>60 / minute</code></td>
+<td align="left">Image retrieval rate</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>14. Error Handling &amp; HTTP Status Codes</h2>
+<p>OCTO-RAG returns standard HTTP status codes. Error responses adhere to the FastAPI default JSON schema: <code>{&quot;detail&quot;: &quot;&lt;error_message&gt;&quot;}</code>.</p>
+<table>
+<thead>
+<tr>
+<th align="left">HTTP Status Code</th>
+<th align="left">Scenario</th>
+<th align="left">Typical Detail Message</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>200 OK</code></strong></td>
+<td align="left">Request executed successfully</td>
+<td align="left">Returned with response schema</td>
+</tr>
+<tr>
+<td align="left"><strong><code>400 Bad Request</code></strong></td>
+<td align="left">Prompt injection pattern detected</td>
+<td align="left"><code>&quot;Potential prompt injection detected.&quot;</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>400 Bad Request</code></strong></td>
+<td align="left">Out-of-domain query</td>
+<td align="left"><code>&quot;I am specialized strictly in refrigerator and cooling appliance technical support...&quot;</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>400 Bad Request</code></strong></td>
+<td align="left">Unsupported document MIME / extension</td>
+<td align="left"><code>&quot;Unsupported format. Supported: .docx, .pdf, .ppt, .pptx, .txt, .xls, .xlsx&quot;</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>404 Not Found</code></strong></td>
+<td align="left">Missing session or document image</td>
+<td align="left"><code>&quot;Session not found&quot;</code> or <code>&quot;Not found&quot;</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>413 Payload Too Large</code></strong></td>
+<td align="left">Document upload exceeds 25MB</td>
+<td align="left"><code>&quot;File is too large. Max size allowed is 25MB.&quot;</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>429 Too Many Requests</code></strong></td>
+<td align="left">Client exceeded endpoint rate limit</td>
+<td align="left"><code>&quot;Rate limit exceeded: 20 per 1 minute&quot;</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>500 Internal Error</code></strong></td>
+<td align="left">Unhandled server or service exception</td>
+<td align="left"><code>&quot;LLM call failed: ...&quot;</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>503 Service Unavailable</code></strong></td>
+<td align="left">All LLM providers unreachable</td>
+<td align="left"><code>&quot;No LLM provider available. Ollama was unreachable...&quot;</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>15. End-to-End API Workflows</h2>
+<h3>Workflow 1: Document Upload to Grounded Answering</h3>
+<pre><code class="language-mermaid">sequenceDiagram
+    autonumber
+    actor Tech as Technician / Admin
+    participant API as FastAPI Gateway
+    participant Parser as MarkItDown &amp; PyMuPDF
+    participant Qdrant as Qdrant Vector Store
+    participant LLM as LLM Provider (Groq/Ollama)
+
+    Tech-&gt;&gt;API: POST /upload (Whirlpool_WRF535.pdf)
+    API-&gt;&gt;Parser: Parse text + Extract CAD diagrams
+    Parser-&gt;&gt;Qdrant: Index 384-dim text vectors (manuals)
+    Parser-&gt;&gt;Qdrant: Index 768-dim vision vectors (manual_images)
+    API--&gt;&gt;Tech: 200 OK (chunks_ingested: 42)
+
+    Tech-&gt;&gt;API: POST /chat (&quot;How to replace defrost heater?&quot;)
+    API-&gt;&gt;API: Prompt Guard: Domain &amp; Injection check
+    API-&gt;&gt;Qdrant: Waterfall Hybrid Retrieval (Dense + BM25)
+    Qdrant--&gt;&gt;API: Top-5 Chunks + Schematics
+    API-&gt;&gt;LLM: Grounded System Prompt + Context
+    LLM--&gt;&gt;API: Synthesized instructions with citations
+    API--&gt;&gt;Tech: 200 OK (answer, sources: [&quot;Whirlpool_WRF535.pdf&quot;])
+</code></pre>
+<h3>Workflow 2: Hands-Free Voice Diagnostic Loop</h3>
+<pre><code class="language-mermaid">sequenceDiagram
+    autonumber
+    actor Tech as Field Technician (Hands-Free)
+    participant API as FastAPI Gateway
+    participant STT as Audio Service (Whisper / Sarvam)
+    participant Agent as LangGraph Engine
+    participant TTS as Neural TTS (Edge-TTS / Sarvam)
+
+    Tech-&gt;&gt;API: POST /transcribe (audio.wav, hint_lang: &quot;en&quot;)
+    API-&gt;&gt;STT: Transcode 16kHz mono &amp; transcribe
+    STT--&gt;&gt;API: &quot;Error code Er FF on display&quot;
+    API--&gt;&gt;Tech: {&quot;text&quot;: &quot;Error code Er FF on display&quot;}
+
+    Tech-&gt;&gt;API: POST /agent/run (query: &quot;Error code Er FF on display&quot;)
+    API-&gt;&gt;Agent: Resolve error code, retrieve wiring schematic
+    Agent--&gt;&gt;API: Diagnostic steps + schematic image URL
+    API--&gt;&gt;Tech: AgentResponse (answer, steps, images)
+
+    Tech-&gt;&gt;API: POST /speak (text: answer)
+    API-&gt;&gt;TTS: Synthesize spoken voice audio
+    TTS--&gt;&gt;API: audio/mpeg binary stream
+    API--&gt;&gt;Tech: Audio stream (Plays aloud over technician speaker)
+</code></pre>
+<hr>
+<h2>16. Verification &amp; Testing Guide</h2>
+<h3>1. Health Verification via cURL</h3>
+<pre><code class="language-bash"># Check basic API status and vector count
+curl -X GET &quot;http://127.0.0.1:8000/health&quot;
+
+# Inspect LLM provider telemetry
+curl -X GET &quot;http://127.0.0.1:8000/health/llm&quot;
+</code></pre>
+<h3>2. Manual Upload via cURL</h3>
+<pre><code class="language-bash">curl -X POST &quot;http://127.0.0.1:8000/upload&quot; \
+  -H &quot;accept: application/json&quot; \
+  -F &quot;file=@tests/manual/test_manual.txt;type=text/plain&quot;
+</code></pre>
+<h3>3. Grounded Chat Query via Python</h3>
+<pre><code class="language-python">import urllib.request
+import json
+
+payload = json.dumps({
+    &quot;message&quot;: &quot;What is the recommended freezer temperature?&quot;
+}).encode(&quot;utf-8&quot;)
+
+req = urllib.request.Request(
+    &quot;http://127.0.0.1:8000/chat&quot;,
+    data=payload,
+    headers={&quot;Content-Type&quot;: &quot;application/json&quot;},
+    method=&quot;POST&quot;
+)
+
+with urllib.request.urlopen(req) as resp:
+    data = json.loads(resp.read().decode(&quot;utf-8&quot;))
+    print(&quot;Answer:&quot;, data[&quot;answer&quot;])
+    print(&quot;Sources:&quot;, data[&quot;sources&quot;])
+</code></pre>
+<h3>4. Automated Pytest Verification</h3>
+<p>From the <code>backend/</code> directory:</p>
+<pre><code class="language-powershell"># Run complete test suite (unit, security, image association, workflow)
+python -m pytest tests -v
+</code></pre>
+<hr>
+<h2>17. Interactive API Explorers (Swagger &amp; ReDoc)</h2>
+<p>FastAPI automatically generates interactive OpenAPI documentation:</p>
+<ul>
+<li><strong>Swagger UI</strong>: <a href="http://127.0.0.1:8000/docs"><code>http://127.0.0.1:8000/docs</code></a><ul>
+<li>Interactive parameter entry, file upload testing, schema model inspection, and live &quot;Try it out&quot; execution.</li>
+</ul>
+</li>
+<li><strong>ReDoc UI</strong>: <a href="http://127.0.0.1:8000/redoc"><code>http://127.0.0.1:8000/redoc</code></a><ul>
+<li>Clean, publication-grade three-panel API specification.</li>
+</ul>
+</li>
+<li><strong>Raw OpenAPI Schema</strong>: <a href="http://127.0.0.1:8000/openapi.json"><code>http://127.0.0.1:8000/openapi.json</code></a></li>
+</ul>
+<hr>
+<h2>18. API Changelog</h2>
+<h3>Version 3.0.0</h3>
+<ul>
+<li><strong>Model Context Protocol (MCP)</strong>: Integrated FastMCP server mounted at <code>/mcp</code> (<code>/mcp/sse</code>) and stdio, exposing 6 diagnostic tools (<code>search_fridge_manuals</code>, <code>lookup_error_code</code>, <code>get_thermistor_ohm_table</code>, <code>lookup_part_number</code>, <code>run_octo_agent</code>, <code>troubleshoot_appliance_turn</code>).</li>
+<li><strong>Resilient Cloud LLM Fallback</strong>: Added multi-model auto-recovery on Groq (<code>qwen/qwen3.8-27b</code>, <code>openai/gpt-oss-120b</code>, <code>openai/gpt-oss-20b</code>) and secondary cascade to SambaNova (<code>Meta-Llama-3.3-70B-Instruct</code>).</li>
+<li><strong>Chat History &amp; Session Persistence</strong>: Added <code>/sessions</code> REST endpoints with SQLite session storage.</li>
+<li><strong>Multilingual Voice Support</strong>: Integrated Sarvam AI (<code>Saaras v3</code> STT, <code>Bulbul v3</code> TTS) alongside Microsoft <code>edge-tts</code> and local <code>faster-whisper</code>.</li>
+<li><strong>Pre-LLM Security Layer</strong>: Implemented regex guardrails (<code>is_prompt_injection</code> and <code>is_out_of_domain</code>) saving 100% of LLM tokens on off-topic requests.</li>
+<li><strong>3-Level Waterfall Hybrid RAG</strong>: Combined dense vector search with in-memory BM25 sparse scoring via Reciprocal Rank Fusion ($k=60$).</li>
+<li><strong>CAD Vector Recovery &amp; Vision Search</strong>: Added PyMuPDF vector path rendering and SigLIP 2 cross-modal schematic retrieval.</li>
+</ul>
+
+</div>
+<script>var toggle = document.getElementById("themeToggle");var saved = localStorage.getItem("theme");if (saved === "dark") { document.body.classList.add("dark"); toggle.textContent = "☀️ Light"; }toggle.addEventListener("click", function() {  document.body.classList.toggle("dark");  var isDark = document.body.classList.contains("dark");  localStorage.setItem("theme", isDark ? "dark" : "light");  toggle.textContent = isDark ? "☀️ Light" : "🌙 Dark";});var searchBox = document.getElementById("searchBox");var searchResults = document.getElementById("searchResults");fetch("/doc2site/routes.json").then(function(r) { return r.json(); }).then(function(routes) {  searchBox.addEventListener("input", function() {    var q = searchBox.value.toLowerCase().trim();    if (!q) { searchResults.style.display = "none"; return; }    var matches = routes.filter(function(r) { return r.title.toLowerCase().includes(q); });    if (matches.length === 0) { searchResults.style.display = "none"; return; }    searchResults.innerHTML = matches.map(function(r) { return "<a href=" + r.url + ">" + r.title + "</a>"; }).join("");    searchResults.style.display = "block";  });  document.addEventListener("click", function(e) { if (!searchBox.contains(e.target)) searchResults.style.display = "none"; });});</script>
+</body>
+</html>
