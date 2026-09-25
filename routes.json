@@ -4,6 +4,10 @@
     "url": "/doc2site/API.html"
   },
   {
+    "title": "api",
+    "url": "/doc2site/api.html"
+  },
+  {
     "title": "hello",
     "url": "/doc2site/hello.html"
   },

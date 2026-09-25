@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>api — doc2site</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f9fafb; --text: #1a1a2e; --nav-bg: #1a1a2e; --nav-link: #a0c4ff;
+  --container-bg: #ffffff; --shadow: rgba(0,0,0,0.08); --code-bg: #f0f4ff;
+  --pre-bg: #1e1e2e; --pre-text: #cdd6f4; --blockquote-bg: #f0f4ff;
+  --border: #e0e0e0; --h1-border: #a0c4ff; --search-bg: #ffffff;
+  --search-border: #ccc;
+}
+body.dark {
+  --bg: #0f0f1a; --text: #e0e0f0; --nav-bg: #0a0a14; --nav-link: #7eb8ff;
+  --container-bg: #1a1a2e; --shadow: rgba(0,0,0,0.4); --code-bg: #2a2a3e;
+  --pre-bg: #0d0d1a; --pre-text: #cdd6f4; --blockquote-bg: #1e1e32;
+  --border: #2a2a3e; --h1-border: #7eb8ff; --search-bg: #1a1a2e;
+  --search-border: #3a3a5e;
+}
+body { font-family: "Segoe UI", system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; transition: background 0.3s, color 0.3s; }
+nav { background: var(--nav-bg); padding: 14px 40px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px var(--shadow); }
+.nav-brand { color: #ffffff; font-weight: 700; font-size: 1.1rem; text-decoration: none; margin-right: 10px; }
+nav a { color: var(--nav-link); text-decoration: none; font-size: 0.9rem; font-weight: 500; padding: 4px 10px; border-radius: 20px; transition: background 0.2s, color 0.2s; }
+nav a:hover { background: rgba(160,196,255,0.15); color: #ffffff; }
+.nav-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.search-box { padding: 6px 14px; border-radius: 20px; border: 1px solid var(--search-border); background: var(--search-bg); color: var(--text); font-size: 0.85rem; width: 200px; outline: none; }
+.search-results { position: absolute; top: 54px; right: 40px; background: var(--container-bg); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px var(--shadow); width: 260px; z-index: 200; display: none; overflow: hidden; }
+.search-results a { display: block; padding: 10px 16px; color: var(--text); text-decoration: none; font-size: 0.9rem; border-bottom: 1px solid var(--border); }
+.search-results a:hover { background: var(--code-bg); }
+.theme-toggle { background: none; border: 1px solid var(--nav-link); color: var(--nav-link); border-radius: 20px; padding: 4px 12px; cursor: pointer; font-size: 0.85rem; }
+.theme-toggle:hover { background: var(--nav-link); color: #1a1a2e; }
+.container { max-width: 860px; margin: 48px auto; padding: 48px; background: var(--container-bg); border-radius: 16px; box-shadow: 0 4px 24px var(--shadow); }
+h1 { font-size: 2.4rem; font-weight: 800; margin-bottom: 16px; border-bottom: 3px solid var(--h1-border); padding-bottom: 12px; }
+h2 { font-size: 1.6rem; font-weight: 700; margin: 36px 0 12px; }
+h3 { font-size: 1.2rem; font-weight: 600; margin: 24px 0 8px; }
+p { font-size: 1rem; margin-bottom: 16px; }
+a { color: #0066cc; }
+code { background: var(--code-bg); padding: 2px 7px; border-radius: 4px; font-size: 0.88rem; font-family: "Courier New", monospace; color: #d63384; }
+pre { background: var(--pre-bg); color: var(--pre-text); padding: 20px; border-radius: 10px; overflow-x: auto; margin-bottom: 20px; }
+pre code { background: none; color: inherit; padding: 0; }
+ul, ol { padding-left: 24px; margin-bottom: 16px; }
+li { margin-bottom: 6px; }
+blockquote { border-left: 4px solid var(--h1-border); padding: 12px 20px; background: var(--blockquote-bg); border-radius: 0 10px 10px 0; margin-bottom: 16px; font-style: italic; }
+table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+th { background: var(--nav-bg); color: #fff; padding: 10px 14px; text-align: left; }
+td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+tr:nth-child(even) { background: var(--code-bg); }
+img { max-width: 100%; border-radius: 10px; margin: 16px 0; }
+hr { border: none; border-top: 2px solid var(--border); margin: 32px 0; }
+@media (max-width: 600px) { .container { padding: 24px 16px; margin: 16px; } nav { padding: 12px 16px; } .search-box { width: 130px; } h1 { font-size: 1.8rem; } }
+
+</style>
+</head>
+<body>
+<nav>
+<a class="nav-brand" href="/doc2site/">doc2site</a>
+<a href="/doc2site/API.html">API</a><a href="/doc2site/api.html">api</a><a href="/doc2site/hello.html">hello</a><a href="/doc2site/nature.html">nature</a>
+<div class="nav-right">
+<input class="search-box" id="searchBox" type="text" placeholder="Search pages..." />
+<div class="search-results" id="searchResults"></div>
+<button class="theme-toggle" id="themeToggle">🌙 Dark</button>
+</div>
+</nav>
+<div class="container">
+<h1>OCTO-AUTO RAG: Multimodal Automotive Diagnostic Assistant &amp; MCP Server — API Documentation</h1>
+<p>Comprehensive, authoritative technical reference for the <strong>OCTO-AUTO RAG</strong> REST API gateway and native <strong>Model Context Protocol (MCP)</strong> vehicle diagnostic server, powered by a <strong>Dual-Database Architecture: Qdrant Vector Database + PostgreSQL Relational Engine</strong>.</p>
+<hr>
+<h2>Table of Contents</h2>
+<ol>
+<li><a href="#1-api-overview">API Overview</a></li>
+<li><a href="#2-base-url--server-configuration">Base URL &amp; Server Configuration</a></li>
+<li><a href="#3-dual-database-architecture-qdrant--postgresql">Dual-Database Architecture (Qdrant + PostgreSQL)</a><ul>
+<li><a href="#qdrant-dedicated-vector-database">Qdrant: Dedicated Vector Database</a></li>
+<li><a href="#postgresql-relational-store-sessions--audit">PostgreSQL: Relational Store, Sessions &amp; Audit</a></li>
+<li><a href="#data-synchronization--lifecycle">Data Synchronization &amp; Lifecycle</a></li>
+</ul>
+</li>
+<li><a href="#4-api-conventions--protocols">API Conventions &amp; Protocols</a></li>
+<li><a href="#5-endpoint-reference-matrix">Endpoint Reference Matrix</a></li>
+<li><a href="#6-chat--streaming-apis">Chat &amp; Streaming APIs</a><ul>
+<li><a href="#post-chat">POST /chat</a></li>
+<li><a href="#post-chatstream">POST /chat/stream</a></li>
+</ul>
+</li>
+<li><a href="#7-vehicle-manual-ingestion--asset-management">Vehicle Manual Ingestion &amp; Asset Management</a><ul>
+<li><a href="#post-upload">POST /upload</a></li>
+<li><a href="#get-files">GET /files</a></li>
+<li><a href="#delete-filesfilename">DELETE /files/{filename}</a></li>
+<li><a href="#post-adminreset">POST /admin/reset</a></li>
+<li><a href="#get-vehicles">GET /vehicles</a></li>
+<li><a href="#get-debug_qdrant">GET /debug_qdrant</a></li>
+</ul>
+</li>
+<li><a href="#8-automotive-agent-execution-api">Automotive Agent Execution API</a><ul>
+<li><a href="#post-agentrun">POST /agent/run</a></li>
+</ul>
+</li>
+<li><a href="#9-obd-ii-guided-troubleshooting--sessions">OBD-II Guided Troubleshooting &amp; Sessions</a><ul>
+<li><a href="#post-troubleshoot">POST /troubleshoot</a></li>
+<li><a href="#get-sessions">GET /sessions</a></li>
+<li><a href="#post-sessions">POST /sessions</a></li>
+<li><a href="#get-sessionssession_id">GET /sessions/{session_id}</a></li>
+<li><a href="#delete-sessionssession_id">DELETE /sessions/{session_id}</a></li>
+</ul>
+</li>
+<li><a href="#10-voice--speech-apis-hands-free-shop-floor">Voice &amp; Speech APIs (Hands-Free Shop Floor)</a><ul>
+<li><a href="#post-transcribe">POST /transcribe</a></li>
+<li><a href="#post-speak">POST /speak</a></li>
+</ul>
+</li>
+<li><a href="#11-automotive-schematic--image-asset-api">Automotive Schematic &amp; Image Asset API</a><ul>
+<li><a href="#get-document-imagesdocument_idimage_id">GET /document-images/{document_id}/{image_id}</a></li>
+</ul>
+</li>
+<li><a href="#12-system-telemetry--health-checks">System Telemetry &amp; Health Checks</a><ul>
+<li><a href="#get-health">GET /health</a></li>
+<li><a href="#get-healthllm">GET /health/llm</a></li>
+</ul>
+</li>
+<li><a href="#13-model-context-protocol-mcp-integration">Model Context Protocol (MCP) Integration</a><ul>
+<li><a href="#architecture--protocol-mount">Architecture &amp; Protocol Mount</a></li>
+<li><a href="#tool-1-search_vehicle_manuals">Tool 1: search_vehicle_manuals</a></li>
+<li><a href="#tool-2-lookup_obd_error_code">Tool 2: lookup_obd_error_code</a></li>
+<li><a href="#tool-3-get_ect_sensor_ohm_table">Tool 3: get_ect_sensor_ohm_table</a></li>
+<li><a href="#tool-4-lookup_oem_part_number">Tool 4: lookup_oem_part_number</a></li>
+<li><a href="#tool-5-run_octo_agent">Tool 5: run_octo_agent</a></li>
+<li><a href="#tool-6-troubleshoot_vehicle_turn">Tool 6: troubleshoot_vehicle_turn</a></li>
+</ul>
+</li>
+<li><a href="#14-security-automotive-domain-boundaries--rate-limiting">Security, Automotive Domain Boundaries &amp; Rate Limiting</a></li>
+<li><a href="#15-error-handling--http-status-codes">Error Handling &amp; HTTP Status Codes</a></li>
+<li><a href="#16-end-to-end-automotive-workflows">End-to-End Automotive Workflows</a></li>
+<li><a href="#17-verification--testing-guide">Verification &amp; Testing Guide</a></li>
+<li><a href="#18-interactive-api-explorers-swagger--redoc">Interactive API Explorers (Swagger &amp; ReDoc)</a></li>
+<li><a href="#19-api-changelog">API Changelog</a></li>
+</ol>
+<hr>
+<h2>1. API Overview</h2>
+<p><strong>OCTO-AUTO RAG</strong> is an enterprise-grade multimodal artificial intelligence platform, state-guided Standard Operating Procedure (SOP) diagnostic engine, and Model Context Protocol (MCP) server engineered for dealership service bays, commercial fleet facilities, and automotive field technicians.</p>
+<p>The system unifies two specialized storage engines to solve complex operational challenges:</p>
+<ol>
+<li><strong>Qdrant Vector Engine</strong>: Ultra-low-latency high-dimensional vector search across dual collections (<code>manuals</code> for text, <code>manual_images</code> for electrical CAD schematics) with payload filtering.</li>
+<li><strong>PostgreSQL Relational Engine</strong>: ACID-compliant transactional persistence for workshop repair orders, multi-turn troubleshooting dialogue, diagnostic session states, audit logs, and file version registries.</li>
+</ol>
+<p>Key Operational Capabilities:</p>
+<ul>
+<li><strong>Low MTTR Retrieval</strong>: Sub-100ms retrieval of wiring harnesses, pinout schematics, and torque specifications from 500+ page OEM workshop manuals using hybrid Reciprocal Rank Fusion (RRF, $k=60$) combining Qdrant dense vectors with in-memory BM25 sparse scoring.</li>
+<li><strong>Cross-Modal Schematic Search</strong>: Google SigLIP 2 vision embeddings indexed directly in Qdrant, retrieving visual circuit schematics and exploded views from text queries.</li>
+<li><strong>OBD-II Diagnostic Engine</strong>: Automated lookup and structured guided workflows for standard SAE/ISO Diagnostic Trouble Codes (<code>P0300</code>, <code>P0171</code>, <code>P0420</code>, <code>B1000</code>, <code>U0100</code>).</li>
+<li><strong>Hands-Free Shop Floor Ergonomics</strong>: Voice STT (<code>faster-whisper</code> + Sarvam AI) and synthesized speech readouts (<code>edge-tts</code>), enabling hands-free operation while technicians hold multimeter probes.</li>
+<li><strong>Pre-LLM Security Perimeter</strong>: Domain boundary filters intercept non-automotive prompts before vector database or LLM invocation, consuming <strong>0 LLM API tokens</strong> on off-topic requests.</li>
+</ul>
+<hr>
+<h2>2. Base URL &amp; Server Configuration</h2>
+<h3>Server Access Points</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Service / Interface</th>
+<th align="left">Base URL</th>
+<th align="left">Protocol</th>
+<th align="left">Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>REST API Gateway</strong></td>
+<td align="left"><code>http://127.0.0.1:8000</code></td>
+<td align="left">HTTP / HTTPS</td>
+<td align="left">FastAPI ASGI engine (<code>uvicorn app.main:app</code>)</td>
+</tr>
+<tr>
+<td align="left"><strong>MCP SSE Service</strong></td>
+<td align="left"><code>http://127.0.0.1:8000/mcp/sse</code></td>
+<td align="left">HTTP SSE</td>
+<td align="left">Model Context Protocol SSE stream</td>
+</tr>
+<tr>
+<td align="left"><strong>Technician Console</strong></td>
+<td align="left"><code>http://localhost:3000</code></td>
+<td align="left">HTTP</td>
+<td align="left">Next.js 14 Service Bay Web UI</td>
+</tr>
+<tr>
+<td align="left"><strong>Qdrant Engine</strong></td>
+<td align="left"><code>http://localhost:6333</code></td>
+<td align="left">HTTP / gRPC</td>
+<td align="left">Vector similarity search &amp; collections</td>
+</tr>
+<tr>
+<td align="left"><strong>PostgreSQL Engine</strong></td>
+<td align="left"><code>postgresql://localhost:5432/octo_auto</code></td>
+<td align="left">TCP / asyncpg</td>
+<td align="left">Relational tables, sessions &amp; audit history</td>
+</tr>
+</tbody></table>
+<h3>Middleware &amp; Lifecycle</h3>
+<ul>
+<li><strong>Lifespan Warmup</strong>: Pre-warms <code>SentenceTransformers</code> (<code>all-MiniLM-L6-v2</code>) and <code>SigLIP 2</code> embedding models on server startup to eliminate cold-start delay.</li>
+<li><strong>CORS Protection</strong>: Configured via <code>CORSMiddleware</code> restricted to <code>http://localhost:3000</code>.</li>
+<li><strong>Authentication</strong>: <code>Not specified in the current implementation</code>. Perimeter access is protected via SlowAPI IP rate limiting and local subnet isolation.</li>
+</ul>
+<hr>
+<h2>3. Dual-Database Architecture (Qdrant + PostgreSQL)</h2>
+<p>OCTO-AUTO RAG employs a clear separation of storage responsibilities: <strong>Qdrant</strong> is dedicated exclusively to high-dimensional similarity retrieval, while <strong>PostgreSQL</strong> guarantees transactional durability for business logic and session history.</p>
+<pre><code class="language-mermaid">graph TD
+    Client([Technician UI / Claude Desktop / API Client]) --&gt; Gateway[FastAPI Backend Gateway]
+
+    subgraph Qdrant Vector Engine
+        Gateway --&gt;|Vector Similarity Search| QdrantText[(Collection: manuals&lt;br/&gt;384-dim Dense Vectors&lt;br/&gt;HNSW Cosine)]
+        Gateway --&gt;|Multimodal Visual Search| QdrantVision[(Collection: manual_images&lt;br/&gt;768-dim SigLIP 2 Vectors&lt;br/&gt;HNSW Cosine)]
+    end
+
+    subgraph PostgreSQL Relational Engine
+        Gateway --&gt;|Session CRUD &amp; Dialogue| PGSessions[(Table: diagnostic_sessions&lt;br/&gt;Table: session_turns)]
+        Gateway --&gt;|File Ingestion Registry| PGRegistry[(Table: manual_registry&lt;br/&gt;MD5 Hashes &amp; Versions)]
+        Gateway --&gt;|Technician Audit Trail| PGAudit[(Table: service_audit_logs&lt;br/&gt;SOP Compliance Records)]
+    end
+</code></pre>
+<h3>Qdrant: Dedicated Vector Database</h3>
+<ul>
+<li><strong>Collection <code>manuals</code></strong>:<ul>
+<li><strong>Vector Dimension</strong>: 384 (<code>all-MiniLM-L6-v2</code>).</li>
+<li><strong>Metric</strong>: Cosine similarity.</li>
+<li><strong>HNSW Index Parameters</strong>: <code>m=16</code>, <code>ef_construct=100</code>.</li>
+<li><strong>Payload Schema</strong>:<pre><code class="language-json">{
+  &quot;chunk_id&quot;: &quot;uuid-str&quot;,
+  &quot;source_file&quot;: &quot;Toyota_Camry_2021_Manual.pdf&quot;,
+  &quot;product&quot;: &quot;Toyota Camry 2.5L&quot;,
+  &quot;page_number&quot;: 78,
+  &quot;section_header&quot;: &quot;Ignition System Diagnosis&quot;,
+  &quot;content&quot;: &quot;Text segment...&quot;
+}
+</code></pre>
+</li>
+</ul>
+</li>
+<li><strong>Collection <code>manual_images</code></strong>:<ul>
+<li><strong>Vector Dimension</strong>: 768 (<code>google/siglip-base-patch16-224</code>).</li>
+<li><strong>Metric</strong>: Cosine similarity.</li>
+<li><strong>Payload Schema</strong>:<pre><code class="language-json">{
+  &quot;image_id&quot;: &quot;camry_p78_coil_pinout&quot;,
+  &quot;document_id&quot;: &quot;Toyota_Camry_2021_Manual&quot;,
+  &quot;page_number&quot;: 78,
+  &quot;caption&quot;: &quot;Ignition Coil Harness Pinout Diagram&quot;,
+  &quot;image_path&quot;: &quot;images/Toyota_Camry_2021_Manual/p78_img1.png&quot;
+}
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3>PostgreSQL: Relational Store, Sessions &amp; Audit</h3>
+<pre><code class="language-sql">-- Relational Schema in PostgreSQL
+CREATE TABLE manual_registry (
+    id SERIAL PRIMARY KEY,
+    filename VARCHAR(255) UNIQUE NOT NULL,
+    vehicle_make VARCHAR(100),
+    vehicle_model VARCHAR(100),
+    model_year INT,
+    file_hash VARCHAR(64) NOT NULL,
+    chunks_count INT DEFAULT 0,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE diagnostic_sessions (
+    session_id VARCHAR(100) PRIMARY KEY,
+    user_id VARCHAR(100) DEFAULT &#39;default_user&#39;,
+    vehicle_model VARCHAR(100),
+    current_dtc VARCHAR(20),
+    status VARCHAR(50) DEFAULT &#39;START&#39;,
+    step_number INT DEFAULT 0,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE session_turns (
+    id SERIAL PRIMARY KEY,
+    session_id VARCHAR(100) REFERENCES diagnostic_sessions(session_id) ON DELETE CASCADE,
+    sender VARCHAR(20) NOT NULL, -- &#39;user&#39; or &#39;assistant&#39;
+    message_text TEXT NOT NULL,
+    question TEXT,
+    action TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+</code></pre>
+<hr>
+<h3>Data Synchronization &amp; Lifecycle</h3>
+<ol>
+<li><strong>Ingestion</strong>: Uploaded manuals are recorded in PostgreSQL <code>manual_registry</code> with their MD5 hash. Chunk text vectors and extracted schematic visual vectors are written into Qdrant collections.</li>
+<li><strong>Retrieval</strong>: Queries perform 3-level waterfall vector similarity search in Qdrant, fused with in-memory BM25 scoring via Reciprocal Rank Fusion ($k=60$).</li>
+<li><strong>Session State</strong>: Multi-turn troubleshooting states and technician measurements (<code>Yes</code>/<code>No</code> actions, multimeter readings) are saved to PostgreSQL <code>diagnostic_sessions</code>.</li>
+<li><strong>Deletion</strong>: Deleting a manual removes its registration in PostgreSQL and purges its vector points in Qdrant by <code>source_file</code> filter atomically.</li>
+</ol>
+<hr>
+<h2>4. API Conventions &amp; Protocols</h2>
+<ul>
+<li><strong>Content-Type</strong>:<ul>
+<li><code>application/json; charset=utf-8</code> for REST endpoints.</li>
+<li><code>multipart/form-data</code> for manual uploads and audio files.</li>
+<li><code>text/event-stream</code> for live Server-Sent Events (SSE).</li>
+<li><code>audio/mpeg</code> or <code>audio/wav</code> for synthesized spoken instructions.</li>
+</ul>
+</li>
+<li><strong>Rate Limit Headers</strong>: Managed via <code>slowapi</code> (<code>X-RateLimit-Limit</code>, <code>X-RateLimit-Remaining</code>, <code>X-RateLimit-Reset</code>). Exceeded limits return <code>429 Too Many Requests</code>.</li>
+<li><strong>Automotive Domain Boundary</strong>: Queries to <code>/chat</code>, <code>/chat/stream</code>, <code>/troubleshoot</code>, and <code>/agent/run</code> must relate to vehicles, OBD-II DTC codes, or workshop procedures. Non-automotive queries are blocked with <code>400 Bad Request</code> prior to database queries or LLM calls.</li>
+</ul>
+<hr>
+<h2>5. Endpoint Reference Matrix</h2>
+<table>
+<thead>
+<tr>
+<th align="left">Method</th>
+<th align="left">Endpoint Path</th>
+<th align="left">Primary Purpose</th>
+<th align="left">Primary Store</th>
+<th align="left">Rate Limit</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>GET</code></td>
+<td align="left"><code>/health</code></td>
+<td align="left">API status, LLM active provider, vector count</td>
+<td align="left">Qdrant + PG</td>
+<td align="left">None</td>
+</tr>
+<tr>
+<td align="left"><code>GET</code></td>
+<td align="left"><code>/health/llm</code></td>
+<td align="left">Telemetry on Ollama models and cloud fallback</td>
+<td align="left">LLM Provider</td>
+<td align="left">None</td>
+</tr>
+<tr>
+<td align="left"><code>GET</code></td>
+<td align="left"><code>/files</code></td>
+<td align="left">List all indexed OEM vehicle service manuals</td>
+<td align="left">PostgreSQL</td>
+<td align="left">None</td>
+</tr>
+<tr>
+<td align="left"><code>DELETE</code></td>
+<td align="left"><code>/files/{filename}</code></td>
+<td align="left">Atomic delete of manual, vectors &amp; images</td>
+<td align="left">Qdrant + PG</td>
+<td align="left">None</td>
+</tr>
+<tr>
+<td align="left"><code>POST</code></td>
+<td align="left"><code>/admin/reset</code></td>
+<td align="left">Purge all Qdrant vectors, PG sessions &amp; files</td>
+<td align="left">Qdrant + PG</td>
+<td align="left">None</td>
+</tr>
+<tr>
+<td align="left"><code>GET</code></td>
+<td align="left"><code>/vehicles</code></td>
+<td align="left">List all unique vehicle models in database</td>
+<td align="left">PostgreSQL</td>
+<td align="left">None</td>
+</tr>
+<tr>
+<td align="left"><code>GET</code></td>
+<td align="left"><code>/debug_qdrant</code></td>
+<td align="left">Vector distribution by document in Qdrant</td>
+<td align="left">Qdrant</td>
+<td align="left">None</td>
+</tr>
+<tr>
+<td align="left"><code>POST</code></td>
+<td align="left"><code>/chat</code></td>
+<td align="left">Standard multi-turn automotive RAG chat</td>
+<td align="left">Qdrant + PG</td>
+<td align="left"><code>20/minute</code></td>
+</tr>
+<tr>
+<td align="left"><code>POST</code></td>
+<td align="left"><code>/chat/stream</code></td>
+<td align="left">Token-streaming SSE endpoint for chat</td>
+<td align="left">Qdrant</td>
+<td align="left"><code>30/minute</code></td>
+</tr>
+<tr>
+<td align="left"><code>POST</code></td>
+<td align="left"><code>/upload</code></td>
+<td align="left">Parse, chunk, embed &amp; index manual</td>
+<td align="left">Qdrant + PG</td>
+<td align="left"><code>60/minute</code></td>
+</tr>
+<tr>
+<td align="left"><code>POST</code></td>
+<td align="left"><code>/transcribe</code></td>
+<td align="left">Transcribe mechanic&#39;s audio to text</td>
+<td align="left">Speech Engine</td>
+<td align="left"><code>60/minute</code></td>
+</tr>
+<tr>
+<td align="left"><code>GET</code></td>
+<td align="left"><code>/document-images/{doc_id}/{img_id}</code></td>
+<td align="left">Stream extracted wiring schematic image</td>
+<td align="left">File Storage</td>
+<td align="left"><code>60/minute</code></td>
+</tr>
+<tr>
+<td align="left"><code>POST</code></td>
+<td align="left"><code>/speak</code></td>
+<td align="left">Synthesize diagnostic text to spoken audio</td>
+<td align="left">Speech Engine</td>
+<td align="left"><code>20/minute</code></td>
+</tr>
+<tr>
+<td align="left"><code>POST</code></td>
+<td align="left"><code>/troubleshoot</code></td>
+<td align="left">Multi-turn state-guided OBD-II diagnosis</td>
+<td align="left">PostgreSQL</td>
+<td align="left"><code>20/minute</code></td>
+</tr>
+<tr>
+<td align="left"><code>POST</code></td>
+<td align="left"><code>/agent/run</code></td>
+<td align="left">Autonomous LangGraph diagnostic agent</td>
+<td align="left">Qdrant + PG</td>
+<td align="left"><code>10/minute</code></td>
+</tr>
+<tr>
+<td align="left"><code>GET</code></td>
+<td align="left"><code>/sessions</code></td>
+<td align="left">List active repair sessions by technician</td>
+<td align="left">PostgreSQL</td>
+<td align="left">None</td>
+</tr>
+<tr>
+<td align="left"><code>GET</code></td>
+<td align="left"><code>/sessions/{session_id}</code></td>
+<td align="left">Retrieve full repair history &amp; measurements</td>
+<td align="left">PostgreSQL</td>
+<td align="left">None</td>
+</tr>
+<tr>
+<td align="left"><code>POST</code></td>
+<td align="left"><code>/sessions</code></td>
+<td align="left">Save or update repair session in PostgreSQL</td>
+<td align="left">PostgreSQL</td>
+<td align="left">None</td>
+</tr>
+<tr>
+<td align="left"><code>DELETE</code></td>
+<td align="left"><code>/sessions/{session_id}</code></td>
+<td align="left">Delete repair session record</td>
+<td align="left">PostgreSQL</td>
+<td align="left">None</td>
+</tr>
+<tr>
+<td align="left"><code>GET</code></td>
+<td align="left"><code>/mcp/sse</code></td>
+<td align="left">FastMCP diagnostic server stream</td>
+<td align="left">MCP Server</td>
+<td align="left">None</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>6. Chat &amp; Streaming APIs</h2>
+<h3>POST /chat</h3>
+<p>Primary grounded question-answering endpoint. Performs automotive entity recognition, checks domain guardrails, executes 3-level waterfall search over Qdrant (<code>Exact Model</code> $\rightarrow$ <code>Platform Family</code> $\rightarrow$ <code>Global Manuals</code>), fuses dense embeddings with in-memory BM25 keyword scoring, logs session turn to PostgreSQL, and returns grounded answers with exact manual citations.</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>POST</code></li>
+<li><strong>Path</strong>: <code>/chat</code></li>
+<li><strong>Rate Limit</strong>: <code>20/minute</code></li>
+<li><strong>Headers</strong>: <code>Content-Type: application/json</code></li>
+</ul>
+<h4>Request Parameters (<code>ChatRequest</code>)</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Field</th>
+<th align="left">Type</th>
+<th align="left">Required</th>
+<th align="left">Constraints</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>message</code></td>
+<td align="left"><code>string</code></td>
+<td align="left"><strong>Yes</strong></td>
+<td align="left">1 to 4000 chars</td>
+<td align="left">Mechanic&#39;s inquiry, DTC code, or symptom.</td>
+</tr>
+<tr>
+<td align="left"><code>source_file</code></td>
+<td align="left"><code>string</code></td>
+<td align="left">No</td>
+<td align="left">Default: <code>None</code></td>
+<td align="left">Restrict search to specific manual (e.g. <code>Ford_F150_2022_Manual.pdf</code>).</td>
+</tr>
+<tr>
+<td align="left"><code>session_id</code></td>
+<td align="left"><code>string</code></td>
+<td align="left">No</td>
+<td align="left">Default: <code>None</code></td>
+<td align="left">UUID for conversation and clarification tracking.</td>
+</tr>
+</tbody></table>
+<h4>Request Example</h4>
+<pre><code class="language-json">{
+  &quot;message&quot;: &quot;What is the cylinder head bolt torque specification and tightening sequence?&quot;,
+  &quot;source_file&quot;: &quot;Toyota_Camry_2.5L_2021_Service_Manual.pdf&quot;,
+  &quot;session_id&quot;: &quot;bay-4-workorder-8812&quot;
+}
+</code></pre>
+<h4>Response Example (200 OK — <code>ChatResponse</code>)</h4>
+<pre><code class="language-json">{
+  &quot;answer&quot;: &quot;For the **Toyota 2.5L A25A-FKS engine**, tighten cylinder head bolts in three progressive stages following the crisscross sequence from center outward:\n1. **Step 1**: Torque all bolts to **36 lb-ft (49 N·m)**.\n2. **Step 2**: Mark bolt heads and turn each bolt **90 degrees clockwise**.\n3. **Step 3**: Turn each bolt an additional **90 degrees clockwise** (180 degrees total rotation). Replace bolts if permanently stretched.&quot;,
+  &quot;sources&quot;: [
+    &quot;Toyota_Camry_2.5L_2021_Service_Manual.pdf&quot;
+  ],
+  &quot;needs_clarification&quot;: false,
+  &quot;clarification_question&quot;: null
+}
+</code></pre>
+<hr>
+<h3>POST /chat/stream</h3>
+<p>Low Time-to-First-Token (TTFT) streaming endpoint utilizing Server-Sent Events (SSE) to deliver generated responses word-by-word.</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>POST</code></li>
+<li><strong>Path</strong>: <code>/chat/stream</code></li>
+<li><strong>Rate Limit</strong>: <code>30/minute</code></li>
+<li><strong>Headers</strong>:<ul>
+<li><code>Content-Type: application/json</code></li>
+<li><code>Accept: text/event-stream</code></li>
+</ul>
+</li>
+</ul>
+<h4>Stream Event Output</h4>
+<pre><code class="language-text">data: The
+data:  cylinder
+data:  head
+data:  torque
+data:  is
+data:  **36 lb-ft**
+data:  plus
+data:  180
+data:  degrees.
+data: [DONE]
+</code></pre>
+<hr>
+<h2>7. Vehicle Manual Ingestion &amp; Asset Management</h2>
+<h3>POST /upload</h3>
+<p>Ingests, converts, chunks, embeds, and stores vehicle workshop documentation across storage engines:</p>
+<ol>
+<li>Validates file size ($\le 25\text{MB}$) and MIME whitelist.</li>
+<li>Checks MD5 checksum in PostgreSQL <code>manual_registry</code> to skip duplicate files.</li>
+<li>Microsoft <strong>MarkItDown</strong> renders document into clean Markdown text.</li>
+<li><strong>PyMuPDF</strong> renders vector CAD diagrams and wiring schematics.</li>
+<li>Generates 384-dim text vectors $\rightarrow$ stored in Qdrant collection <code>manuals</code>.</li>
+<li>Generates 768-dim SigLIP 2 visual vectors $\rightarrow$ stored in Qdrant collection <code>manual_images</code>.</li>
+<li>Records document metadata and chunk count in PostgreSQL <code>manual_registry</code>.</li>
+</ol>
+<ul>
+<li><strong>HTTP Method</strong>: <code>POST</code></li>
+<li><strong>Path</strong>: <code>/upload</code></li>
+<li><strong>Rate Limit</strong>: <code>60/minute</code></li>
+<li><strong>Content-Type</strong>: <code>multipart/form-data</code></li>
+</ul>
+<h4>Allowed File Types</h4>
+<ul>
+<li><code>.pdf</code>, <code>.docx</code>, <code>.ppt</code>, <code>.pptx</code>, <code>.xls</code>, <code>.xlsx</code>, <code>.txt</code></li>
+</ul>
+<h4>Response Example (200 OK — <code>UploadResponse</code>)</h4>
+<pre><code class="language-json">{
+  &quot;filename&quot;: &quot;Ford_F150_2022_Manual.pdf&quot;,
+  &quot;markdown_file&quot;: &quot;Ford_F150_2022_Manual.md&quot;,
+  &quot;chunks_ingested&quot;: 142,
+  &quot;status&quot;: &quot;processed&quot;
+}
+</code></pre>
+<hr>
+<h3>GET /files</h3>
+<p>Queries PostgreSQL <code>manual_registry</code> and local disk to return an alphabetical list of all ingested vehicle service manuals.</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>GET</code></li>
+<li><strong>Path</strong>: <code>/files</code></li>
+<li><strong>Response (200 OK)</strong>:<pre><code class="language-json">{
+  &quot;files&quot;: [
+    &quot;Ford_F150_2022_Manual.pdf&quot;,
+    &quot;Honda_Civic_2020_Powertrain_Manual.pdf&quot;,
+    &quot;Toyota_Camry_2.5L_2021_Service_Manual.pdf&quot;
+  ]
+}
+</code></pre>
+</li>
+</ul>
+<hr>
+<h3>DELETE /files/{filename}</h3>
+<p>Atomic complete purge of an automotive manual across all systems:</p>
+<ol>
+<li>Deletes raw file and processed markdown from local disk.</li>
+<li>Deletes text vector points in Qdrant collection <code>manuals</code> matching <code>source_file</code>.</li>
+<li>Deletes schematic vision points in Qdrant collection <code>manual_images</code>.</li>
+<li>Deletes entry from PostgreSQL <code>manual_registry</code>.</li>
+<li>Clears in-memory LRU retrieval cache.</li>
+</ol>
+<ul>
+<li><strong>HTTP Method</strong>: <code>DELETE</code></li>
+<li><strong>Path</strong>: <code>/files/{filename}</code></li>
+<li><strong>Response (200 OK)</strong>:<pre><code class="language-json">{
+  &quot;status&quot;: &quot;deleted&quot;,
+  &quot;filename&quot;: &quot;Ford_F150_2022_Manual.pdf&quot;
+}
+</code></pre>
+</li>
+</ul>
+<hr>
+<h3>POST /admin/reset</h3>
+<p>Completely wipes all manuals from disk, purges both Qdrant collections (<code>manuals</code> and <code>manual_images</code>), and truncates PostgreSQL tables (<code>manual_registry</code>, <code>diagnostic_sessions</code>, <code>session_turns</code>).</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>POST</code></li>
+<li><strong>Path</strong>: <code>/admin/reset</code></li>
+<li><strong>Response (200 OK)</strong>:<pre><code class="language-json">{
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;message&quot;: &quot;All manuals and index data successfully wiped.&quot;
+}
+</code></pre>
+</li>
+</ul>
+<hr>
+<h3>GET /vehicles</h3>
+<p>Queries Qdrant vector payloads and PostgreSQL metadata for all unique vehicle makes and models.</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>GET</code></li>
+<li><strong>Path</strong>: <code>/vehicles</code></li>
+<li><strong>Response (200 OK)</strong>:<pre><code class="language-json">{
+  &quot;vehicles&quot;: [
+    &quot;Ford F-150 3.5L EcoBoost&quot;,
+    &quot;Honda Civic 2.0L&quot;,
+    &quot;Toyota Camry 2.5L&quot;
+  ]
+}
+</code></pre>
+</li>
+</ul>
+<hr>
+<h3>GET /debug_qdrant</h3>
+<p>Inspects vector density and point counts per manual directly inside Qdrant.</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>GET</code></li>
+<li><strong>Path</strong>: <code>/debug_qdrant</code></li>
+<li><strong>Response (200 OK)</strong>:<pre><code class="language-json">{
+  &quot;total&quot;: 560,
+  &quot;sources_count&quot;: {
+    &quot;Ford_F150_2022_Manual.pdf&quot;: 218,
+    &quot;Toyota_Camry_2.5L_2021_Service_Manual.pdf&quot;: 342
+  }
+}
+</code></pre>
+</li>
+</ul>
+<hr>
+<h2>8. Automotive Agent Execution API</h2>
+<h3>POST /agent/run</h3>
+<p>Executes the autonomous <strong>LangGraph <code>StateGraph</code></strong> agentic workflow for vehicle troubleshooting. Resolves vehicle identifiers, checks version records, queries Qdrant hybrid vectors, records session turns in PostgreSQL, and delivers structured repair steps with wiring schematics.</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>POST</code></li>
+<li><strong>Path</strong>: <code>/agent/run</code></li>
+<li><strong>Rate Limit</strong>: <code>10/minute</code></li>
+<li><strong>Headers</strong>: <code>Content-Type: application/json</code></li>
+</ul>
+<h4>Request Example (<code>AgentRequest</code>)</h4>
+<pre><code class="language-json">{
+  &quot;query&quot;: &quot;Troubleshoot diagnostic trouble code P0301 on 2021 Toyota Camry&quot;,
+  &quot;source_input&quot;: &quot;Toyota_Camry_2.5L_2021_Service_Manual.pdf&quot;,
+  &quot;session_id&quot;: &quot;bay-2-agent-session&quot;
+}
+</code></pre>
+<h4>Response Example (200 OK — <code>AgentResponse</code>)</h4>
+<pre><code class="language-json">{
+  &quot;answer&quot;: &quot;Code **P0301** indicates a detected cylinder 1 misfire. Common causes include a defective ignition coil, fouled spark plug, or clogged fuel injector. Swap the Cylinder 1 ignition coil with Cylinder 2 to check if the misfire migrates.&quot;,
+  &quot;steps&quot;: [
+    &quot;Disconnect negative 12V battery terminal&quot;,
+    &quot;Remove engine beauty cover to access coil-on-plug packs&quot;,
+    &quot;Disconnect Cylinder 1 coil harness connector (Grey 4-pin)&quot;,
+    &quot;Remove 10mm retaining bolt and pull ignition coil&quot;,
+    &quot;Inspect spark plug tube for engine oil ingress&quot;
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;source&quot;: &quot;Toyota_Camry_2.5L_2021_Service_Manual.pdf&quot;,
+      &quot;page&quot;: 78,
+      &quot;rrf_score&quot;: 0.0412
+    }
+  ],
+  &quot;product_id&quot;: &quot;Toyota Camry 2.5L&quot;,
+  &quot;clarification_needed&quot;: false,
+  &quot;clarification_question&quot;: null,
+  &quot;status&quot;: &quot;troubleshoot&quot;,
+  &quot;version_info&quot;: null,
+  &quot;images&quot;: [
+    {
+      &quot;image_id&quot;: &quot;camry_p78_ignition_layout&quot;,
+      &quot;document_id&quot;: &quot;Toyota_Camry_2.5L_2021_Service_Manual&quot;,
+      &quot;page&quot;: 78,
+      &quot;caption&quot;: &quot;Ignition Coil Harness Pinout and Cylinder Bank Identification&quot;,
+      &quot;image_url&quot;: &quot;/document-images/Toyota_Camry_2.5L_2021_Service_Manual/camry_p78_ignition_layout&quot;
+    }
+  ]
+}
+</code></pre>
+<hr>
+<h2>9. OBD-II Guided Troubleshooting &amp; Sessions</h2>
+<h3>POST /troubleshoot</h3>
+<p>Interactive state machine executing bounded diagnostic workflows:
+$$\text{START} \longrightarrow \text{IDENTIFY_VEHICLE} \longrightarrow \text{RETRIEVE_KNOWLEDGE} \longrightarrow \text{DIAGNOSE} \longrightarrow \text{QUESTION} \longrightarrow \text{ACTION} \longrightarrow \text{VERIFY} \longrightarrow \text{RESOLVED / ESCALATE}$$</p>
+<p>Every state transition and technician response is persisted directly into PostgreSQL <code>diagnostic_sessions</code> and <code>session_turns</code>.</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>POST</code></li>
+<li><strong>Path</strong>: <code>/troubleshoot</code></li>
+<li><strong>Rate Limit</strong>: <code>20/minute</code></li>
+</ul>
+<h4>Request Example (<code>TroubleshootRequest</code>)</h4>
+<pre><code class="language-json">{
+  &quot;session_id&quot;: &quot;workorder-9901&quot;,
+  &quot;message&quot;: &quot;Engine runs rough at idle, check engine light flashing, code P0300 present&quot;
+}
+</code></pre>
+<h4>Response Example (Action State — 200 OK)</h4>
+<pre><code class="language-json">{
+  &quot;status&quot;: &quot;action&quot;,
+  &quot;action&quot;: &quot;Connect fuel pressure gauge to the test port on the fuel rail. Key ON, engine OFF: fuel pressure must hold between 55 to 60 PSI. If pressure drops immediately below 40 PSI, inspect the fuel pressure regulator and check valve.&quot;,
+  &quot;session&quot;: {
+    &quot;session_id&quot;: &quot;workorder-9901&quot;,
+    &quot;product&quot;: &quot;Ford F-150 3.5L EcoBoost&quot;,
+    &quot;issue&quot;: &quot;P0300 random misfire&quot;,
+    &quot;step&quot;: 2,
+    &quot;status&quot;: &quot;ACTION&quot;,
+    &quot;history&quot;: [
+      {
+        &quot;question&quot;: &quot;Is the misfire isolated to a single cylinder or multiple cylinders?&quot;,
+        &quot;answer&quot;: &quot;Scan tool shows random misfires across cylinders 1, 3, and 5.&quot;
+      }
+    ]
+  }
+}
+</code></pre>
+<hr>
+<h3>Session Management Endpoints (PostgreSQL Persisted)</h3>
+<ul>
+<li><code>GET /sessions?user_id=tech_mike</code>: Lists all repair order sessions stored in PostgreSQL.</li>
+<li><code>GET /sessions/{session_id}</code>: Retrieves complete multi-turn diagnostic dialogue and technician measurements.</li>
+<li><code>POST /sessions</code>: Persists or updates session records in PostgreSQL <code>diagnostic_sessions</code>.</li>
+<li><code>DELETE /sessions/{session_id}</code>: Clears a completed work order session from PostgreSQL.</li>
+</ul>
+<hr>
+<h2>10. Voice &amp; Speech APIs (Hands-Free Shop Floor)</h2>
+<h3>POST /transcribe</h3>
+<p>Converts technician speech into text using local <code>faster-whisper</code> (<code>int8</code> CPU) for English, or <strong>Sarvam AI (<code>Saaras v3</code>)</strong> for regional dialects.</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>POST</code></li>
+<li><strong>Path</strong>: <code>/transcribe</code></li>
+<li><strong>Rate Limit</strong>: <code>60/minute</code></li>
+<li><strong>Content-Type</strong>: <code>multipart/form-data</code></li>
+<li><strong>Fields</strong>: <code>audio</code> (<code>UploadFile</code>), <code>hint_lang</code> (<code>string</code>, default <code>&quot;auto&quot;</code>).</li>
+</ul>
+<h4>Response (200 OK)</h4>
+<pre><code class="language-json">{
+  &quot;text&quot;: &quot;The oxygen sensor bank 1 sensor 1 voltage is stuck at 0.1 volts lean.&quot;,
+  &quot;detected_language&quot;: &quot;en&quot;
+}
+</code></pre>
+<hr>
+<h3>POST /speak</h3>
+<p>Synthesizes diagnostic instructions into spoken audio using Microsoft <strong>Edge-TTS</strong> or <strong>Sarvam AI (<code>Bulbul v3</code>)</strong>, stripping technical markdown syntax for clear speech delivery.</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>POST</code></li>
+<li><strong>Path</strong>: <code>/speak</code></li>
+<li><strong>Rate Limit</strong>: <code>20/minute</code></li>
+<li><strong>Payload (<code>SpeakRequest</code>)</strong>:<pre><code class="language-json">{
+  &quot;text&quot;: &quot;Measure voltage across the MAF sensor connector pins 2 and 3 with ignition ON.&quot;,
+  &quot;language&quot;: &quot;en&quot;
+}
+</code></pre>
+</li>
+<li><strong>Response</strong>: Binary audio stream (<code>audio/mpeg</code> or <code>audio/wav</code>).</li>
+</ul>
+<hr>
+<h2>11. Automotive Schematic &amp; Image Asset API</h2>
+<h3>GET /document-images/{document_id}/{image_id}</h3>
+<p>Securely streams wiring diagrams, ECU pinout maps, and exploded component illustrations.</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>GET</code></li>
+<li><strong>Path</strong>: <code>/document-images/{document_id}/{image_id}</code></li>
+<li><strong>Rate Limit</strong>: <code>60/minute</code></li>
+<li><strong>Security Validation</strong>:<ul>
+<li><code>document_id</code> and <code>image_id</code> must match <code>^[a-zA-Z0-9_-]+$</code>.</li>
+<li>Canonical path prefix verified to prevent directory traversal.</li>
+<li>Image record must exist in Qdrant / filesystem metadata.</li>
+</ul>
+</li>
+<li><strong>Response</strong>: <code>FileResponse</code> (<code>image/png</code> or <code>image/jpeg</code>).</li>
+</ul>
+<hr>
+<h2>12. System Telemetry &amp; Health Checks</h2>
+<h3>GET /health</h3>
+<p>Returns service status and vector points stored in Qdrant.</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>GET</code></li>
+<li><strong>Path</strong>: <code>/health</code></li>
+<li><strong>Response (200 OK — <code>HealthResponse</code>)</strong>:<pre><code class="language-json">{
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;llm_provider&quot;: &quot;groq&quot;,
+  &quot;vectors_stored&quot;: 560
+}
+</code></pre>
+</li>
+</ul>
+<hr>
+<h3>GET /health/llm</h3>
+<p>Telemetry on local Ollama models (<code>qwen2.5:3b</code>, <code>gemma3:4b</code>, <code>llama3.2:3b</code>), Qdrant vector connectivity, PostgreSQL session store health, and active cloud fallback models (Groq <code>qwen/qwen3.8-27b</code>, SambaNova).</p>
+<ul>
+<li><strong>HTTP Method</strong>: <code>GET</code></li>
+<li><strong>Path</strong>: <code>/health/llm</code></li>
+<li><strong>Response (200 OK)</strong>:<pre><code class="language-json">{
+  &quot;status&quot;: &quot;ok&quot;,
+  &quot;primary_provider&quot;: &quot;ollama&quot;,
+  &quot;ollama_enabled&quot;: false,
+  &quot;ollama_base_url&quot;: &quot;http://127.0.0.1:11434&quot;,
+  &quot;vector_store&quot;: &quot;qdrant&quot;,
+  &quot;relational_store&quot;: &quot;postgresql&quot;,
+  &quot;cloud_fallback_provider&quot;: &quot;groq&quot;,
+  &quot;cloud_fallback_model&quot;: &quot;qwen/qwen3.8-27b&quot;,
+  &quot;last_provider_used&quot;: &quot;groq&quot;,
+  &quot;last_model_used&quot;: &quot;qwen/qwen3.8-27b&quot;,
+  &quot;stats&quot;: {
+    &quot;total_requests&quot;: 28,
+    &quot;cloud_fallback_served&quot;: 28
+  }
+}
+</code></pre>
+</li>
+</ul>
+<hr>
+<h2>13. Model Context Protocol (MCP) Integration</h2>
+<h3>Architecture &amp; Protocol Mount</h3>
+<p>OCTO-AUTO RAG mounts a native FastMCP Server exposing <strong>6 automotive diagnostic tools</strong> over Server-Sent Events at <code>GET /mcp/sse</code> and Standard I/O (stdio).</p>
+<h4>Claude Desktop Configuration (<code>claude_desktop_config.json</code>)</h4>
+<pre><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;octo-auto&quot;: {
+      &quot;command&quot;: &quot;python&quot;,
+      &quot;args&quot;: [
+        &quot;C:\\Users\\SAMSUNG\\OneDrive\\Desktop\\rag-multimodal-assistant\\backend\\app\\mcp\\auto_mcp_server.py&quot;
+      ]
+    }
+  }
+}
+</code></pre>
+<hr>
+<h3>Tool 1: search_vehicle_manuals</h3>
+<p>Searches Qdrant vector database for torque values, wiring diagrams, and fluid capacities from OEM service manuals.</p>
+<ul>
+<li><strong>Parameters</strong>:<ul>
+<li><code>query</code> (<code>string</code>, required): Diagnostic or procedure inquiry.</li>
+<li><code>source_file</code> (<code>string</code>, optional): Restrict search to specific vehicle manual.</li>
+</ul>
+</li>
+<li><strong>Output</strong>: Formatted chunks with page and manual citations.</li>
+</ul>
+<hr>
+<h3>Tool 2: lookup_obd_error_code</h3>
+<p>Resolves standard SAE/ISO OBD-II Diagnostic Trouble Codes (DTCs).</p>
+<ul>
+<li><strong>Parameters</strong>:<ul>
+<li><code>make</code> (<code>string</code>, required): Vehicle manufacturer (e.g. <code>Ford</code>, <code>Toyota</code>, <code>Honda</code>, <code>General Motors</code>).</li>
+<li><code>model</code> (<code>string</code>, required): Vehicle model/engine (e.g. <code>F-150 3.5L</code>, <code>Camry 2.5L</code>).</li>
+<li><code>code</code> (<code>string</code>, required): OBD-II code (e.g. <code>P0300</code>, <code>P0171</code>, <code>P0420</code>, <code>B1000</code>, <code>U0100</code>).</li>
+</ul>
+</li>
+</ul>
+<h4>Output Example</h4>
+<pre><code class="language-json">{
+  &quot;make&quot;: &quot;Ford&quot;,
+  &quot;model&quot;: &quot;F-150&quot;,
+  &quot;code&quot;: &quot;P0171&quot;,
+  &quot;status&quot;: &quot;FOUND&quot;,
+  &quot;system&quot;: &quot;Fuel Trim System Lean (Bank 1)&quot;,
+  &quot;test_procedure&quot;: &quot;Monitor Long Term Fuel Trim (LTFT) with scan tool. Spray carb cleaner around intake manifold gaskets and PCV hose while observing short-term trim for sudden drop. Smoke test intake tract.&quot;,
+  &quot;recommended_action&quot;: &quot;Inspect MAF sensor element for oil contamination. Replace cracked PCV vacuum lines or intake plenum gaskets.&quot;
+}
+</code></pre>
+<hr>
+<h3>Tool 3: get_ect_sensor_ohm_table</h3>
+<p>Calculates expected NTC thermistor resistance (k$\Omega$) for Engine Coolant Temperature (ECT) and Intake Air Temperature (IAT) sensors using the Steinhart-Hart equation.</p>
+<ul>
+<li><strong>Parameters</strong>:<ul>
+<li><code>temp_celsius</code> (<code>float</code>, required): Coolant test temperature in °C.</li>
+</ul>
+</li>
+<li><strong>Output Example</strong>:<pre><code class="language-json">{
+  &quot;temperature_celsius&quot;: 20.0,
+  &quot;temperature_fahrenheit&quot;: 68.0,
+  &quot;expected_resistance_kohm&quot;: 2.45,
+  &quot;multimeter_setting&quot;: &quot;20kOhm Resistance&quot;,
+  &quot;testing_instruction&quot;: &quot;Connect multimeter probes across ECT sensor terminals. At 20°C (68°F), meter should read ~2.45 kOhm. Resistance must drop smoothly as engine warms to 90°C (~250 Ohm). Infinite reading indicates open sensor.&quot;,
+  &quot;status&quot;: &quot;OK&quot;
+}
+</code></pre>
+</li>
+</ul>
+<hr>
+<h3>Tool 4: lookup_oem_part_number</h3>
+<p>Resolves OEM replacement parts, part numbers, and replacement difficulty.</p>
+<ul>
+<li><strong>Parameters</strong>:<ul>
+<li><code>model</code> (<code>string</code>, required): Vehicle model (e.g. <code>Ford F-150</code>).</li>
+<li><code>component_name</code> (<code>string</code>, required): Part description (e.g. <code>spark plug</code>, <code>alternator</code>, <code>brake rotor</code>, <code>fuel pump</code>, <code>oxygen sensor</code>).</li>
+</ul>
+</li>
+</ul>
+<h4>Output Example</h4>
+<pre><code class="language-json">{
+  &quot;searched_model&quot;: &quot;Ford F-150&quot;,
+  &quot;searched_component&quot;: &quot;spark plug&quot;,
+  &quot;oem_part_number&quot;: &quot;SP-550 / CYFS-12F-P&quot;,
+  &quot;official_name&quot;: &quot;Motorcraft Iridium Spark Plug (Pre-gapped 0.030\&quot;)&quot;,
+  &quot;electrical_specs&quot;: &quot;Thread 14mm, Hex 5/8\&quot;, Torque 133 lb-in (15 N·m)&quot;,
+  &quot;repair_difficulty&quot;: &quot;Moderate&quot;,
+  &quot;status&quot;: &quot;MATCH_FOUND&quot;
+}
+</code></pre>
+<hr>
+<h3>Tool 5: run_octo_agent</h3>
+<p>Executes full LangGraph autonomous troubleshooting flow from external MCP clients (Claude Desktop / IDEs).</p>
+<ul>
+<li><strong>Parameters</strong>: <code>query</code> (<code>string</code>), <code>source_input</code> (<code>string</code>, optional), <code>session_id</code> (<code>string</code>, optional).</li>
+<li><strong>Output</strong>: Structured <code>AgentResponse</code> dictionary with steps, sources, and schematic image URLs.</li>
+</ul>
+<hr>
+<h3>Tool 6: troubleshoot_vehicle_turn</h3>
+<p>Drives interactive multi-turn OBD-II diagnostic flows from within MCP tools, updating PostgreSQL session state.</p>
+<ul>
+<li><strong>Parameters</strong>: <code>session_id</code> (<code>string</code>), <code>message</code> (<code>string</code>).</li>
+<li><strong>Output</strong>: Diagnostic state machine payload (<code>status</code>, <code>question</code>/<code>action</code>, <code>session</code>).</li>
+</ul>
+<hr>
+<h2>14. Security, Automotive Domain Boundaries &amp; Rate Limiting</h2>
+<h3>Pre-LLM Perimeter Protection</h3>
+<pre><code class="language-mermaid">graph TD
+    Inbound[Inbound Vehicle Request] --&gt; SizeCheck{Payload &lt;= 25MB?}
+    SizeCheck --&gt;|Exceeded| H413[HTTP 413 File Too Large]
+    SizeCheck --&gt;|Valid| InjectionCheck{is_prompt_injection?}
+    InjectionCheck --&gt;|Match| H400I[HTTP 400 Injection Blocked]
+    InjectionCheck --&gt;|Clean| AutoDomainCheck{is_out_of_domain?}
+    AutoDomainCheck --&gt;|Non-Automotive| H400D[HTTP 400 Out of Domain / 0 Tokens]
+    AutoDomainCheck --&gt;|In-Domain Automotive| CorePipeline[Qdrant RRF Retrieval &amp; PostgreSQL Logging]
+</code></pre>
+<h3>Automotive Domain Guardrails (<code>prompt_guard.py</code>)</h3>
+<ul>
+<li><strong>In-Domain Terms Allowed</strong>: Engine, transmission, brake, suspension, chassis, ECU, PCM, alternator, starter, spark plug, fuel injector, OBD-II, DTC, turbocharger, differential, cooling system, radiator, coolant, oil, battery, sensor, catalytic converter, exhaust.</li>
+<li><strong>Out-of-Domain Blocked</strong>: Cooking recipes, household appliances, real estate, politics, cryptocurrencies, poems, creative fiction.</li>
+<li><strong>Economic Value</strong>: Guarantees <strong>0 LLM API tokens</strong> are consumed on irrelevant or malicious traffic.</li>
+</ul>
+<hr>
+<h2>15. Error Handling &amp; HTTP Status Codes</h2>
+<table>
+<thead>
+<tr>
+<th align="left">Status Code</th>
+<th align="left">Trigger Condition</th>
+<th align="left">Detail Message</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>200 OK</code></strong></td>
+<td align="left">Request executed successfully</td>
+<td align="left">Returned with schema payload</td>
+</tr>
+<tr>
+<td align="left"><strong><code>400 Bad Request</code></strong></td>
+<td align="left">Prompt injection pattern detected</td>
+<td align="left"><code>&quot;Potential prompt injection detected.&quot;</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>400 Bad Request</code></strong></td>
+<td align="left">Non-automotive query submitted</td>
+<td align="left"><code>&quot;Specialized strictly in vehicle technical diagnostics...&quot;</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>400 Bad Request</code></strong></td>
+<td align="left">Unsupported manual file format</td>
+<td align="left"><code>&quot;Unsupported format. Supported: .pdf, .docx, .txt, .xlsx&quot;</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>404 Not Found</code></strong></td>
+<td align="left">Missing session ID or schematic asset</td>
+<td align="left"><code>&quot;Session not found&quot;</code> or <code>&quot;Not found&quot;</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>413 Too Large</code></strong></td>
+<td align="left">Manual file exceeds 25MB</td>
+<td align="left"><code>&quot;File is too large. Max size allowed is 25MB.&quot;</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>429 Rate Limit</code></strong></td>
+<td align="left">Inbound requests exceed <code>slowapi</code> cap</td>
+<td align="left"><code>&quot;Rate limit exceeded: 20 per 1 minute&quot;</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>500 Server Error</code></strong></td>
+<td align="left">Unhandled database or model exception</td>
+<td align="left"><code>&quot;LLM call failed: ...&quot;</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>503 Unavailable</code></strong></td>
+<td align="left">All local and cloud LLM providers down</td>
+<td align="left"><code>&quot;No LLM provider available...&quot;</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>16. End-to-End Automotive Workflows</h2>
+<h3>Workflow 1: Technician Hands-Free Misfire Diagnosis (Dual-DB)</h3>
+<pre><code class="language-mermaid">sequenceDiagram
+    autonumber
+    actor Tech as Mechanic (Under Hood)
+    participant API as FastAPI Gateway
+    participant STT as Audio Engine (Whisper / Sarvam)
+    participant Qdrant as Qdrant Vector Store
+    participant PG as PostgreSQL Engine
+    participant LLM as Unified LLM (Groq / Ollama)
+    participant TTS as Speech Engine (Edge-TTS)
+
+    Tech-&gt;&gt;API: POST /transcribe (Audio recording: &quot;Engine stumbling, code P0301&quot;)
+    API-&gt;&gt;STT: Transcode 16kHz mono &amp; transcribe
+    STT--&gt;&gt;API: &quot;Engine stumbling, code P0301&quot;
+    API--&gt;&gt;Tech: 200 OK (text: &quot;Engine stumbling, code P0301&quot;)
+
+    Tech-&gt;&gt;API: POST /agent/run (&quot;Troubleshoot code P0301 on 2021 Toyota Camry&quot;)
+    API-&gt;&gt;API: Verify automotive domain &amp; injection check
+    API-&gt;&gt;Qdrant: Hybrid search: Qdrant dense + in-memory BM25
+    Qdrant--&gt;&gt;API: Top-5 repair manual chunks + coil harness diagram
+    API-&gt;&gt;PG: Record diagnostic turn &amp; active DTC in diagnostic_sessions
+    PG--&gt;&gt;API: Session state confirmed
+    API-&gt;&gt;LLM: Synthesize step-by-step diagnostic procedure
+    LLM--&gt;&gt;API: Repair steps + coil swap test
+    API--&gt;&gt;Tech: 200 OK (AgentResponse with diagram URL)
+
+    Tech-&gt;&gt;API: POST /speak (text: &quot;Swap ignition coil 1 with coil 2...&quot;)
+    API-&gt;&gt;TTS: Generate spoken audio stream
+    TTS--&gt;&gt;API: audio/mpeg stream
+    API--&gt;&gt;Tech: Voice readout plays through shop bay speaker
+</code></pre>
+<hr>
+<h2>17. Verification &amp; Testing Guide</h2>
+<h3>1. Test Qdrant &amp; PostgreSQL Health via cURL</h3>
+<pre><code class="language-bash"># Check basic API status, LLM engine, and Qdrant vector point count
+curl -X GET &quot;http://127.0.0.1:8000/health&quot;
+
+# Detailed telemetry (LLM models, Qdrant &amp; PostgreSQL health)
+curl -X GET &quot;http://127.0.0.1:8000/health/llm&quot;
+</code></pre>
+<h3>2. Query Automotive RAG Pipeline via Python</h3>
+<pre><code class="language-python">import urllib.request
+import json
+
+payload = json.dumps({
+    &quot;message&quot;: &quot;What is the firing order for the 3.5L EcoBoost engine?&quot;
+}).encode(&quot;utf-8&quot;)
+
+req = urllib.request.Request(
+    &quot;http://127.0.0.1:8000/chat&quot;,
+    data=payload,
+    headers={&quot;Content-Type&quot;: &quot;application/json&quot;},
+    method=&quot;POST&quot;
+)
+
+with urllib.request.urlopen(req) as resp:
+    data = json.loads(resp.read().decode(&quot;utf-8&quot;))
+    print(&quot;Answer:\n&quot;, data[&quot;answer&quot;])
+    print(&quot;Sources:&quot;, data[&quot;sources&quot;])
+</code></pre>
+<h3>3. Run Automated Diagnostic Pytest Suite</h3>
+<pre><code class="language-powershell">cd backend
+python -m pytest tests -v
+</code></pre>
+<hr>
+<h2>18. Interactive API Explorers (Swagger &amp; ReDoc)</h2>
+<p>Interactive API explorers are automatically served by FastAPI:</p>
+<ul>
+<li><strong>Interactive Swagger UI</strong>: <a href="http://127.0.0.1:8000/docs"><code>http://127.0.0.1:8000/docs</code></a><ul>
+<li>Full interactive schema exploration, file upload sandbox, and endpoint execution.</li>
+</ul>
+</li>
+<li><strong>ReDoc Technical Reference</strong>: <a href="http://127.0.0.1:8000/redoc"><code>http://127.0.0.1:8000/redoc</code></a><ul>
+<li>Responsive, three-panel technical documentation for enterprise integration.</li>
+</ul>
+</li>
+<li><strong>Raw OpenAPI 3.1 JSON Schema</strong>: <a href="http://127.0.0.1:8000/openapi.json"><code>http://127.0.0.1:8000/openapi.json</code></a></li>
+</ul>
+<hr>
+<h2>19. API Changelog</h2>
+<h3>Version 3.1.0 (Dual-Database Automotive Edition)</h3>
+<ul>
+<li><strong>Qdrant Vector Engine</strong>: Dedicated dual-collection architecture for high-dimensional nearest neighbor search: <code>manuals</code> (384-dim text chunks) and <code>manual_images</code> (768-dim SigLIP 2 visual CAD &amp; wiring diagrams) with payload filtering.</li>
+<li><strong>PostgreSQL Relational Engine</strong>: Added PostgreSQL relational schema (<code>manual_registry</code>, <code>diagnostic_sessions</code>, <code>session_turns</code>) for multi-turn repair histories, technician audit trails, and version checksums.</li>
+<li><strong>Automotive Domain Specialization</strong>: Re-anchored entity identification, prompt guardrails, and diagnostic workflows around light-duty and commercial automotive maintenance.</li>
+<li><strong>OBD-II &amp; Sensor Diagnostics</strong>: Added native FastMCP diagnostic tools for DTC resolution (<code>lookup_obd_error_code</code>), engine coolant temperature sensors (<code>get_ect_sensor_ohm_table</code>), and OEM parts lookup (<code>lookup_oem_part_number</code>).</li>
+<li><strong>Hands-Free Shop Ergonomics</strong>: Integrated dual STT and neural TTS pipelines for seamless voice-driven service bay interaction.</li>
+<li><strong>Multi-Tier Fault Tolerance</strong>: Added resilient cloud fallback across Groq (<code>qwen/qwen3.8-27b</code>) and SambaNova with automatic local Ollama model coordination.</li>
+</ul>
+
+</div>
+<script>var toggle = document.getElementById("themeToggle");var saved = localStorage.getItem("theme");if (saved === "dark") { document.body.classList.add("dark"); toggle.textContent = "☀️ Light"; }toggle.addEventListener("click", function() {  document.body.classList.toggle("dark");  var isDark = document.body.classList.contains("dark");  localStorage.setItem("theme", isDark ? "dark" : "light");  toggle.textContent = isDark ? "☀️ Light" : "🌙 Dark";});var searchBox = document.getElementById("searchBox");var searchResults = document.getElementById("searchResults");fetch("/doc2site/routes.json").then(function(r) { return r.json(); }).then(function(routes) {  searchBox.addEventListener("input", function() {    var q = searchBox.value.toLowerCase().trim();    if (!q) { searchResults.style.display = "none"; return; }    var matches = routes.filter(function(r) { return r.title.toLowerCase().includes(q); });    if (matches.length === 0) { searchResults.style.display = "none"; return; }    searchResults.innerHTML = matches.map(function(r) { return "<a href=" + r.url + ">" + r.title + "</a>"; }).join("");    searchResults.style.display = "block";  });  document.addEventListener("click", function(e) { if (!searchBox.contains(e.target)) searchResults.style.display = "none"; });});</script>
+</body>
+</html>
