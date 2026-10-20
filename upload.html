@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upload — doc2site</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f9fafb;
+  --text: #1a1a2e;
+  --nav-bg: #1a1a2e;
+  --nav-link: #a0c4ff;
+  --container-bg: #ffffff;
+  --shadow: rgba(0,0,0,0.08);
+  --border: #e0e0e0;
+}
+
+body {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+}
+
+nav {
+  background: var(--nav-bg);
+  padding: 14px 40px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px var(--shadow);
+}
+
+.nav-brand {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-decoration: none;
+  margin-right: 10px;
+}
+
+.nav-label {
+  color: var(--nav-link);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+*:focus-visible {
+  outline: 3px solid #a0c4ff;
+  outline-offset: 2px;
+}
+
+main {
+  padding: 48px 24px;
+}
+
+.container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 48px;
+  background: var(--container-bg);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px var(--shadow);
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 24px;
+  border-bottom: 3px solid var(--nav-link);
+  padding-bottom: 12px;
+  color: var(--text);
+}
+
+.repo-info {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 32px;
+  background: #f0f4ff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid #d0dcf0;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+label {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+input[type="password"],
+input[type="file"] {
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--text);
+  font-family: inherit;
+}
+
+input[type="file"] {
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.helper-text {
+  font-size: 0.82rem;
+  color: #666;
+  margin-top: 6px;
+}
+
+#fileInfo {
+  font-size: 0.9rem;
+  color: #444;
+  margin-top: 4px;
+  min-height: 1.4em;
+}
+
+#errorMsg {
+  font-size: 0.9rem;
+  color: #e63946;
+  margin-bottom: 16px;
+  min-height: 1.4em;
+}
+
+#successMsg {
+  font-size: 0.9rem;
+  color: #2ecc71;
+  margin-bottom: 16px;
+  min-height: 1.4em;
+}
+
+#uploadBtn {
+  display: inline-block;
+  padding: 12px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--nav-bg);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, opacity 0.2s;
+  font-family: inherit;
+}
+
+#uploadBtn:hover:not(:disabled) {
+  background: #2a2a4e;
+}
+
+#uploadBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .container { padding: 24px 16px; }
+  nav { padding: 12px 16px; }
+  h1 { font-size: 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="/doc2site/">doc2site</a>
+  <span class="nav-label">Upload</span>
+</nav>
+
+<main>
+  <div class="container">
+    <h1>Upload Markdown</h1>
+
+    <p class="repo-info" id="repoInfo">Targeting: …</p>
+
+    <div class="form-group">
+      <label for="patInput">GitHub Personal Access Token</label>
+      <input type="password" id="patInput" maxlength="255" autocomplete="off" spellcheck="false">
+      <p class="helper-text">Needs <code>contents: write</code> scope. Never stored.</p>
+    </div>
+
+    <div class="form-group">
+      <label for="fileInput">Markdown file (.md, max 750 KB)</label>
+      <input type="file" id="fileInput" accept=".md">
+      <p id="fileInfo" aria-live="polite"></p>
+    </div>
+
+    <p id="errorMsg" role="alert" style="color:#e63946"></p>
+    <p id="successMsg" aria-live="polite" style="color:#2ecc71"></p>
+
+    <button id="uploadBtn" disabled>Upload &amp; Deploy</button>
+  </div>
+</main>
+
+<script>
+const OWNER = 'YOUR_GITHUB_USERNAME';
+const REPO  = 'doc2site';
+
+function readFileAsText(file) {
+  return new Promise(function(resolve, reject) {
+    var reader = new FileReader();
+    reader.onload = function(e) { resolve(e.target.result); };
+    reader.onerror = function() { reject(new Error('Failed to read file.')); };
+    reader.readAsText(file);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  var patInput   = document.getElementById('patInput');
+  var fileInput  = document.getElementById('fileInput');
+  var fileInfo   = document.getElementById('fileInfo');
+  var errorMsg   = document.getElementById('errorMsg');
+  var successMsg = document.getElementById('successMsg');
+  var uploadBtn  = document.getElementById('uploadBtn');
+
+  document.getElementById('repoInfo').textContent = 'Targeting: ' + OWNER + '/' + REPO;
+
+  fileInput.addEventListener('change', function () {
+    errorMsg.textContent  = '';
+    fileInfo.textContent  = '';
+
+    var file = fileInput.files[0];
+    if (!file) { return; }
+
+    if (!file.name.toLowerCase().endsWith('.md')) {
+      errorMsg.textContent = 'Only .md files are accepted.';
+      fileInput.value = '';
+      return;
+    }
+
+    if (file.size > 750 * 1024) {
+      errorMsg.textContent = 'File is too large. Maximum size is 750 KB.';
+      fileInput.value = '';
+      return;
+    }
+
+    fileInfo.textContent = file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
+  });
+
+  function checkReady() {
+    var hasFile = fileInput.files.length > 0 && fileInput.files[0].name.toLowerCase().endsWith('.md') && fileInput.files[0].size <= 750 * 1024;
+    var hasPat  = patInput.value.trim().length > 0;
+    uploadBtn.disabled = !(hasFile && hasPat);
+  }
+
+  patInput.addEventListener('input', checkReady);
+  fileInput.addEventListener('change', checkReady);
+
+  async function handleSubmit() {
+    uploadBtn.disabled = true;
+    uploadBtn.textContent = 'Uploading…';
+    errorMsg.textContent = '';
+    successMsg.textContent = '';
+
+    try {
+      var pat      = patInput.value;
+      var file     = fileInput.files[0];
+      var filename = file.name;
+
+      var rawText    = await readFileAsText(file);
+      var b64content = btoa(unescape(encodeURIComponent(rawText)));
+
+      // Step 3: GET existing file SHA (needed if file already exists in docs/)
+      var apiBase = 'https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/docs/' + encodeURIComponent(filename);
+      var ghHeaders = {
+        'Authorization': 'Bearer ' + pat,
+        'Accept': 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28'
+      };
+
+      var existingSha = null;
+      var getResp = await fetch(apiBase, { headers: ghHeaders });
+      if (getResp.status === 200) {
+        var getJson = await getResp.json();
+        existingSha = getJson.sha;
+      } else if (getResp.status === 404) {
+        existingSha = null; // new file — no SHA needed
+      } else {
+        var getErrJson = null;
+        try { getErrJson = await getResp.json(); } catch (_) {}
+        var getErrMsg = (getErrJson && getErrJson.message) ? getErrJson.message : 'Unknown error';
+        throw new Error('Failed to check existing file (HTTP ' + getResp.status + '): ' + getErrMsg);
+      }
+
+      // Step 4: PUT — commit the file to docs/
+      var putBody = {
+        message: 'docs: upload ' + filename + ' via upload page',
+        content: b64content
+      };
+      if (existingSha) {
+        putBody.sha = existingSha;
+      }
+
+      var putResp = await fetch(apiBase, {
+        method: 'PUT',
+        headers: Object.assign({}, ghHeaders, { 'Content-Type': 'application/json' }),
+        body: JSON.stringify(putBody)
+      });
+
+      if (putResp.status === 200 || putResp.status === 201) {
+        successMsg.innerHTML =
+          '✅ <strong>' + filename + '</strong> committed to <code>docs/</code>. ' +
+          'The GitHub Actions pipeline has been triggered — your page will be live once it completes. ' +
+          '<a href="https://github.com/' + OWNER + '/' + REPO + '/actions" target="_blank" rel="noopener">Watch the pipeline →</a>';
+      } else if (putResp.status === 401) {
+        var putErrJson401 = null;
+        try { putErrJson401 = await putResp.json(); } catch (_) {}
+        errorMsg.textContent = 'Invalid PAT or insufficient permissions (HTTP 401). Make sure your token has the "contents: write" scope.';
+      } else {
+        var putErrJson = null;
+        try { putErrJson = await putResp.json(); } catch (_) {}
+        var putErrMsg = (putErrJson && putErrJson.message) ? putErrJson.message : 'Unknown error';
+        throw new Error('Upload failed (HTTP ' + putResp.status + '): ' + putErrMsg);
+      }
+    } catch (err) {
+      errorMsg.textContent = err.message;
+    } finally {
+      checkReady();
+      uploadBtn.textContent = 'Upload & Deploy';
+    }
+  }
+
+  uploadBtn.addEventListener('click', handleSubmit);
+});
+</script>
+
+</body>
+</html>
