@@ -110,7 +110,7 @@ files.forEach(function(file) {
   var name = file.replace('.md', '');
   var content = fs.readFileSync(path.join(docsDir, file), 'utf-8');
 
-  var hash = crypto.createHash('md5').update(content).digest('hex');
+  var hash = crypto.createHash('sha256').update(content).digest('hex');
   newHashes[name] = hash;
   if (oldHashes[name] === hash && fs.existsSync(path.join(outDir, file.replace('.md', '.html')))) {
     console.log('Skipped (unchanged):', file);
@@ -152,3 +152,13 @@ files.forEach(function(file) {
 });
 
 fs.writeFileSync(hashFile, JSON.stringify(newHashes, null, 2));
+
+// Copy upload page into output so it is deployed to GitHub Pages
+var uploadSrc = path.join(__dirname, '..', 'upload.html');
+var uploadDest = path.join(outDir, 'upload.html');
+if (fs.existsSync(uploadSrc)) {
+  fs.copyFileSync(uploadSrc, uploadDest);
+  console.log('Copied: upload.html');
+} else {
+  console.warn('Warning: upload.html not found at project root, skipping copy.');
+}
