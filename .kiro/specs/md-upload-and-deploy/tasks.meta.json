@@ -1,0 +1,222 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1.1 Add `permissions: contents: write` to `.github/workflows/deploy.yml`": [
+      {
+        "executionId": "278dd375-d9b8-4f37-bb04-9277a1d169ca",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791184014814
+      },
+      {
+        "executionId": "278dd375-d9b8-4f37-bb04-9277a1d169ca",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791184163439
+      },
+      {
+        "executionId": "278dd375-d9b8-4f37-bb04-9277a1d169ca",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791184410960
+      }
+    ],
+    "1.2 Add hash-cache step to `.github/workflows/deploy.yml`": [
+      {
+        "executionId": "278dd375-d9b8-4f37-bb04-9277a1d169ca",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791184029650
+      },
+      {
+        "executionId": "278dd375-d9b8-4f37-bb04-9277a1d169ca",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791184459663
+      },
+      {
+        "executionId": "278dd375-d9b8-4f37-bb04-9277a1d169ca",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791184687712
+      }
+    ],
+    "2.1 Replace MD5 with SHA-256 in `scripts/generate.js`": [
+      {
+        "executionId": "278dd375-d9b8-4f37-bb04-9277a1d169ca",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791184031914
+      },
+      {
+        "executionId": "278dd375-d9b8-4f37-bb04-9277a1d169ca",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791184168287
+      },
+      {
+        "executionId": "278dd375-d9b8-4f37-bb04-9277a1d169ca",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791184412386
+      }
+    ],
+    "2.2 Add `upload.html` copy step at end of `scripts/generate.js`": [
+      {
+        "executionId": "278dd375-d9b8-4f37-bb04-9277a1d169ca",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791184033356
+      },
+      {
+        "executionId": "278dd375-d9b8-4f37-bb04-9277a1d169ca",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791184463231
+      },
+      {
+        "executionId": "278dd375-d9b8-4f37-bb04-9277a1d169ca",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791184690031
+      }
+    ],
+    "3. Checkpoint — verify pipeline and generator changes": [
+      {
+        "executionId": "278dd375-d9b8-4f37-bb04-9277a1d169ca",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791184035719
+      },
+      {
+        "executionId": "5920b526-21ab-4681-b26c-374d90a05df0",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791185489641
+      }
+    ],
+    "4.1 Create `upload.html` at the project root with page shell, CSS, and config constants": [
+      {
+        "executionId": "278dd375-d9b8-4f37-bb04-9277a1d169ca",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791184038648
+      },
+      {
+        "executionId": "278dd375-d9b8-4f37-bb04-9277a1d169ca",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791184169531
+      },
+      {
+        "executionId": "278dd375-d9b8-4f37-bb04-9277a1d169ca",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791184413598
+      }
+    ],
+    "4.2 Add file input, validation, and file-info display to `upload.html`": [
+      {
+        "executionId": "278dd375-d9b8-4f37-bb04-9277a1d169ca",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791184040479
+      },
+      {
+        "executionId": "278dd375-d9b8-4f37-bb04-9277a1d169ca",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791184464494
+      },
+      {
+        "executionId": "278dd375-d9b8-4f37-bb04-9277a1d169ca",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791184691294
+      }
+    ],
+    "4.3 Add upload button with enable/disable gating logic": [
+      {
+        "executionId": "278dd375-d9b8-4f37-bb04-9277a1d169ca",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791184045170
+      },
+      {
+        "executionId": "5920b526-21ab-4681-b26c-374d90a05df0",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791184933470
+      },
+      {
+        "executionId": "5920b526-21ab-4681-b26c-374d90a05df0",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791185102324
+      }
+    ],
+    "5.1 Implement `handleSubmit()` — file read and base64 encoding": [
+      {
+        "executionId": "278dd375-d9b8-4f37-bb04-9277a1d169ca",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791184048568
+      },
+      {
+        "executionId": "5920b526-21ab-4681-b26c-374d90a05df0",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791185142326
+      },
+      {
+        "executionId": "5920b526-21ab-4681-b26c-374d90a05df0",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791185233764
+      }
+    ],
+    "5.2 Implement GET preflight — fetch existing file SHA": [
+      {
+        "executionId": "278dd375-d9b8-4f37-bb04-9277a1d169ca",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791184050712
+      },
+      {
+        "executionId": "5920b526-21ab-4681-b26c-374d90a05df0",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791185248752
+      },
+      {
+        "executionId": "5920b526-21ab-4681-b26c-374d90a05df0",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791185348957
+      }
+    ],
+    "5.3 Implement PUT commit — create or update file": [
+      {
+        "executionId": "278dd375-d9b8-4f37-bb04-9277a1d169ca",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791184053048
+      },
+      {
+        "executionId": "5920b526-21ab-4681-b26c-374d90a05df0",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791185364541
+      },
+      {
+        "executionId": "5920b526-21ab-4681-b26c-374d90a05df0",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791185462906
+      }
+    ],
+    "6. Final checkpoint — full end-to-end review": [
+      {
+        "executionId": "278dd375-d9b8-4f37-bb04-9277a1d169ca",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791184055037
+      }
+    ],
+    "1. Fix deploy workflow — permissions and hash cache": [
+      {
+        "executionId": "278dd375-d9b8-4f37-bb04-9277a1d169ca",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791184695889
+      }
+    ],
+    "2. Fix generator — SHA-256 hashing and upload page copy": [
+      {
+        "executionId": "278dd375-d9b8-4f37-bb04-9277a1d169ca",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791184698197
+      }
+    ],
+    "4. Create `upload.html` — structure, config, and PAT input": [
+      {
+        "executionId": "5920b526-21ab-4681-b26c-374d90a05df0",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791185103255
+      }
+    ],
+    "5. Implement upload handler in `upload.html`": [
+      {
+        "executionId": "5920b526-21ab-4681-b26c-374d90a05df0",
+        "chatSessionId": "sess_55a9e468-2863-4b02-bfee-61148464d7fe",
+        "timestamp": 1791185464482
+      }
+    ]
+  }
+}
